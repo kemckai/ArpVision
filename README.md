@@ -1,8 +1,8 @@
-# ArpVision 2.1
+# ArpVision 2.3
 
 **ArpVision** is a comprehensive, interactive guitar fretboard visualizer that helps guitarists understand and master arpeggios, scales, modes, and chord shapes. Built with precision and attention to musical accuracy, ArpVision provides a beautiful, intuitive interface for exploring the guitar neck.
 
-![ArpVision](https://img.shields.io/badge/version-2.1-purple)
+![ArpVision](https://img.shields.io/badge/version-2.3-purple)
 ![License](https://img.shields.io/badge/license-MIT-green)
 
 ## 🎸 Features
@@ -29,7 +29,10 @@
 
 ### CAGED System
 - **Major CAGED Shapes** - All five major triad shapes (C, A, G, E, D) transposable to any root
+- **Minor CAGED Shapes** - All five minor triad shapes (C, A, G, E, D) transposable to any root
+- **CAGED Scale Patterns** - Full major and minor scale patterns for each CAGED shape
 - Visual representation of classic open-position and barre chord forms
+- Toggle between triad and scale views for each shape
 
 ### Pentatonic Boxes
 - **5 Minor Pentatonic Boxes** - Classic position-based patterns (Boxes 1-5)
@@ -44,12 +47,14 @@
 
 ### UI Features
 - **Smart Note Display** - Color-coded intervals (Root, 3rd, 5th, 7th, extensions)
-- **Flat Notation** - Proper musical notation with small "b" (ᵇ) for flats
+- **Flat Notation** - Proper musical notation with flat symbol (♭) for flats
 - **Dynamic Titles** - Fretboard title updates based on selection (e.g., "A Harmonic Minor", "D Major – C Shape")
 - **Theory Panel** - Shows all notes in the current chord/scale with interval names
 - **Scrollable Dropdowns** - Easy navigation through extensive scale lists
 - **Scale Descriptions** - Historical context and usage information for every scale, including cultural origins, famous examples, and musical characteristics
 - **Responsive Design** - Works on desktop and tablet devices
+- **Optimized Performance** - Fast, lean rendering with memoization and efficient algorithms
+- **Error-Free Execution** - Comprehensive input validation ensures smooth operation
 
 ## 🚀 Getting Started
 
@@ -104,8 +109,10 @@ npm start
 ### CAGED Shapes
 
 1. **Go to CAGED Tab** - Click the "CAGED" tab in the arpeggio selector
-2. **Choose Shape** - Click C, A, G, E, or D to see that major triad shape
-3. **Change Root** - The shape transposes automatically to your selected root
+2. **Choose Quality** - Toggle between Major and Minor
+3. **Choose Type** - Toggle between Triads and Scales
+4. **Choose Shape** - Click C, A, G, E, or D to see that shape
+5. **Change Root** - The shape transposes automatically to your selected root
 
 ### Pentatonic Boxes
 
@@ -173,6 +180,18 @@ ArpVision prioritizes **musical correctness** above all else:
 - Scale patterns follow established music theory
 - CAGED shapes are based on standard open-position forms
 - Interval names use proper notation (R, b3, 5, b7, 9, 11, 13, etc.)
+- Minor pentatonic box positions match classic guitar patterns
+- All music theory has been verified for accuracy
+
+## ⚡ Performance & Quality
+
+ArpVision 2.3 includes significant performance improvements:
+
+- **Memoized Calculations** - Active notes and chord tones are cached to prevent unnecessary recalculations
+- **Optimized Lookups** - O(1) Map/Set lookups instead of O(n) array searches
+- **Efficient Rendering** - React hooks (useMemo, useCallback) minimize re-renders
+- **Input Validation** - Comprehensive validation ensures robust error handling
+- **Clean Execution** - No console errors, smooth user experience
 
 ## 🤝 Contributing
 
@@ -181,9 +200,9 @@ Contributions are welcome! Please feel free to submit a Pull Request.
 ### Areas for Contribution
 - Additional scales or modes
 - More Hot Lick presets
-- Minor CAGED shapes
 - Additional tuning presets
 - UI/UX improvements
+- Performance optimizations
 - Bug fixes
 
 ## 📝 License
@@ -204,5 +223,21 @@ For questions, suggestions, or support, please open an issue on GitHub.
 
 **Made with ❤️ for guitarists everywhere**
 
-*ArpVision 2.1 - Visualize. Understand. Master.*
+*ArpVision 2.3 - Visualize. Understand. Master.*
+
+## 📋 Changelog
+
+### Version 2.3
+- ✅ Performance optimizations with React memoization
+- ✅ Optimized Fretboard component with Map/Set lookups
+- ✅ Comprehensive input validation and error handling
+- ✅ Fixed flat symbol rendering (♭)
+- ✅ Verified all music theory intervals and CAGED shapes
+- ✅ Improved code quality and maintainability
+
+### Version 2.1
+- Initial release with comprehensive scale library
+- CAGED system implementation
+- Pentatonic box patterns
+- Hot Licks presets
 
