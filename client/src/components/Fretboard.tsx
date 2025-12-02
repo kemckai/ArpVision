@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useMemo, useCallback } from "react";
 import { motion } from "framer-motion";
 import { FretNote, NOTES, STRING_TUNING, formatNoteNameWithFlat } from "../lib/music-theory";
 import { cn } from "@/lib/utils";
@@ -16,16 +16,31 @@ export const Fretboard: React.FC<FretboardProps> = ({ activeNotes, rootNote, hig
   const numFrets = 19; // Number of visible frets (starting at fret 1)
   const strings = [0, 1, 2, 3, 4, 5]; // High E to Low E (visual top to bottom)
   
-  // Helper to find if a note exists at specific string/fret
-  const getNoteAtPos = (stringIdx: number, fretIdx: number) => {
-    return activeNotes.find(n => n.string === stringIdx && n.fret === fretIdx);
-  };
+  // Create a lookup map for O(1) note access instead of O(n) find operations
+  const notesMap = useMemo(() => {
+    const map = new Map<string, FretNote>();
+    activeNotes.forEach(note => {
+      map.set(`${note.string}-${note.fret}`, note);
+    });
+    return map;
+  }, [activeNotes]);
 
-  // Helper to check if a position is highlighted
-  const isHighlighted = (stringIdx: number, fretIdx: number) => {
-    if (!highlightPositions) return true; // If no specific highlights, show all active notes
-    return highlightPositions.some(p => p.string === stringIdx && p.fret === fretIdx);
-  };
+  // Helper to find if a note exists at specific string/fret - optimized with Map lookup
+  const getNoteAtPos = useCallback((stringIdx: number, fretIdx: number) => {
+    return notesMap.get(`${stringIdx}-${fretIdx}`);
+  }, [notesMap]);
+
+  // Create a Set for O(1) highlight checking
+  const highlightSet = useMemo(() => {
+    if (!highlightPositions) return null;
+    return new Set(highlightPositions.map(p => `${p.string}-${p.fret}`));
+  }, [highlightPositions]);
+
+  // Helper to check if a position is highlighted - optimized with Set lookup
+  const isHighlighted = useCallback((stringIdx: number, fretIdx: number) => {
+    if (!highlightSet) return true; // If no specific highlights, show all active notes
+    return highlightSet.has(`${stringIdx}-${fretIdx}`);
+  }, [highlightSet]);
 
   return (
     <div className="w-full overflow-x-auto pb-8">

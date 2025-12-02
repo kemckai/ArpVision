@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useMemo, useCallback } from "react";
 import React from "react";
 import {
   generateFretboardMap,
@@ -57,34 +57,57 @@ export default function Home() {
   const [currentTuning, setCurrentTuning] = useState(TUNINGS[0]);
 
   // Generate active notes based on priority: Hot Lick > CAGED > Pentatonic Box > Scale > Mode > Pentatonic > Arpeggio
-  const activeNotes = activeLick
-    ? generateLickFretboardMap(
+  // Memoized to prevent unnecessary recalculations
+  const activeNotes = useMemo(() => {
+    if (activeLick) {
+      return generateLickFretboardMap(
         activeLick.root,
         activeLick.positions || [],
         currentTuning.notes
-      )
-    : activeCagedId
-    ? cagedQuality === "minor"
-      ? cagedMode === "scale"
-        ? generateCagedMinorScaleFretboardMap(root, activeCagedId as "C" | "A" | "G" | "E" | "D", 19, currentTuning.notes)
-        : generateCagedMinorFretboardMap(root, activeCagedId, currentTuning.notes)
-      : cagedMode === "scale"
-      ? generateCagedScaleFretboardMap(root, activeCagedId as "C" | "A" | "G" | "E" | "D", 19, currentTuning.notes)
-      : generateCagedFretboardMap(root, activeCagedId, currentTuning.notes)
-    : activePentatonicId === "minPent" && activePentBox
-    ? generatePentatonicBoxFretboardMap(
+      );
+    }
+    if (activeCagedId) {
+      if (cagedQuality === "minor") {
+        return cagedMode === "scale"
+          ? generateCagedMinorScaleFretboardMap(root, activeCagedId as "C" | "A" | "G" | "E" | "D", 19, currentTuning.notes)
+          : generateCagedMinorFretboardMap(root, activeCagedId, currentTuning.notes);
+      }
+      return cagedMode === "scale"
+        ? generateCagedScaleFretboardMap(root, activeCagedId as "C" | "A" | "G" | "E" | "D", 19, currentTuning.notes)
+        : generateCagedFretboardMap(root, activeCagedId, currentTuning.notes);
+    }
+    if (activePentatonicId === "minPent" && activePentBox) {
+      return generatePentatonicBoxFretboardMap(
         root,
         activePentBox,
         19,
         currentTuning.notes
-      )
-    : selectedScaleId
-    ? generateScaleFretboardMap(root, selectedScaleId, 19, currentTuning.notes)
-    : activePentatonicId
-    ? generateScaleFretboardMap(root, activePentatonicId, 19, currentTuning.notes)
-    : activeModeId
-    ? generateScaleFretboardMap(root, activeModeId, 19, currentTuning.notes)
-    : generateFretboardMap(root, type, 19, currentTuning.notes);
+      );
+    }
+    if (selectedScaleId) {
+      return generateScaleFretboardMap(root, selectedScaleId, 19, currentTuning.notes);
+    }
+    if (activePentatonicId) {
+      return generateScaleFretboardMap(root, activePentatonicId, 19, currentTuning.notes);
+    }
+    if (activeModeId) {
+      return generateScaleFretboardMap(root, activeModeId, 19, currentTuning.notes);
+    }
+    return generateFretboardMap(root, type, 19, currentTuning.notes);
+  }, [
+    activeLick,
+    activeCagedId,
+    cagedQuality,
+    cagedMode,
+    root,
+    activePentatonicId,
+    activePentBox,
+    selectedScaleId,
+    activeModeId,
+    type,
+    currentTuning.notes,
+  ]);
+
 
   // Get current scale for display - MUST be defined before fretboardTitleLabel
   const currentScale = selectedScaleId
@@ -133,101 +156,27 @@ export default function Home() {
     return root;
   })();
 
-  // Theory panel data
-  const chordTones =
-    activeLick
-      ? Array.from(
-          new Map(
-            activeNotes.map((n) => [
-              n.noteIndex,
-              { noteName: n.noteName, interval: n.interval },
-            ])
-          ).values()
-        ).sort((a, b) => a.interval - b.interval)
-      : currentCagedShape
-      ? Array.from(
-          new Map(
-            (cagedQuality === "minor"
-              ? cagedMode === "scale"
-                ? generateCagedMinorScaleFretboardMap(
-                    root,
-                    currentCagedShape.id,
-                    19,
-                    currentTuning.notes
-                  )
-                : generateCagedMinorFretboardMap(
-                    root,
-                    currentCagedShape.id,
-                    currentTuning.notes
-                  )
-              : cagedMode === "scale"
-              ? generateCagedScaleFretboardMap(
-                  root,
-                  currentCagedShape.id,
-                  19,
-                  currentTuning.notes
-                )
-              : generateCagedFretboardMap(
-                  root,
-                  currentCagedShape.id,
-                  currentTuning.notes
-                )
-            ).map((n) => [
-              n.noteIndex,
-              { noteName: n.noteName, interval: n.interval },
-            ])
-          ).values()
-        ).sort((a, b) => a.interval - b.interval)
-      : currentScale
-      ? Array.from(
-          new Map(
-            generateScaleFretboardMap(
-              root,
-              currentScale.id,
-              19,
-              currentTuning.notes
-            ).map((n) => [
-              n.noteIndex,
-              { noteName: n.noteName, interval: n.interval },
-            ])
-          ).values()
-        ).sort((a, b) => a.interval - b.interval)
-      : currentPent
-      ? Array.from(
-          new Map(
-            generateScaleFretboardMap(
-              root,
-              currentPent.id,
-              19,
-              currentTuning.notes
-            ).map((n) => [
-              n.noteIndex,
-              { noteName: n.noteName, interval: n.interval },
-            ])
-          ).values()
-        ).sort((a, b) => a.interval - b.interval)
-      : currentMode
-      ? Array.from(
-          new Map(
-            generateScaleFretboardMap(
-              root,
-              currentMode.id,
-              19,
-              currentTuning.notes
-            ).map((n) => [
-              n.noteIndex,
-              { noteName: n.noteName, interval: n.interval },
-            ])
-          ).values()
-        ).sort((a, b) => a.interval - b.interval)
-      : currentArpeggio
-      ? currentArpeggio.intervals.map((interval) => {
-          const noteName = NOTES[(NOTES.indexOf(root) + interval) % 12];
-          return { noteName, interval };
-        })
-      : [];
+  // Theory panel data - optimized to use activeNotes instead of recalculating
+  const chordTones = useMemo(() => {
+    // For arpeggios, calculate from intervals directly (most efficient)
+    if (currentArpeggio && !activeLick && !currentCagedShape && !currentScale && !currentPent && !currentMode) {
+      return currentArpeggio.intervals.map((interval) => {
+        const noteName = NOTES[(NOTES.indexOf(root) + interval) % 12];
+        return { noteName, interval };
+      });
+    }
+    // For everything else, use activeNotes (already calculated and memoized)
+    return Array.from(
+      new Map(
+        activeNotes.map((n) => [
+          n.noteIndex,
+          { noteName: n.noteName, interval: n.interval },
+        ])
+      ).values()
+    ).sort((a, b) => a.interval - b.interval);
+  }, [activeNotes, currentArpeggio, root, activeLick, currentCagedShape, currentScale, currentPent, currentMode]);
 
-  const selectLick = (lick: Lick) => {
+  const selectLick = useCallback((lick: Lick) => {
     setRoot(lick.root);
     setType(lick.type);
     setActiveLick(lick);
@@ -236,9 +185,9 @@ export default function Home() {
     setActiveCagedId(null);
     setActivePentBox(null);
     setSelectedScaleId(null);
-  };
+  }, []);
 
-  const handleManualChange = (action: () => void) => {
+  const handleManualChange = useCallback((action: () => void) => {
     setActiveLick(null);
     setActiveModeId(null);
     setActivePentatonicId(null);
@@ -246,22 +195,26 @@ export default function Home() {
     setActivePentBox(null);
     setSelectedScaleId(null);
     action();
-  };
+  }, []);
 
-  const handleRootChange = (newRoot: string) => {
+  const handleRootChange = useCallback((newRoot: string) => {
+    // Validate root note - silently ignore invalid inputs
+    if (!NOTES.includes(newRoot)) {
+      return;
+    }
     setRoot(newRoot);
     // Preserve scale selection when changing root
-  };
+  }, []);
 
-  // Organize scales by category for the dropdown
-  const scalesByCategory = {
+  // Organize scales by category for the dropdown - memoized to prevent recalculation
+  const scalesByCategory = useMemo(() => ({
     mode: ALL_SCALES.filter((s) => s.category === "mode"),
     pentatonic: ALL_SCALES.filter((s) => s.category === "pentatonic"),
     minor: ALL_SCALES.filter((s) => s.category === "minor"),
     symmetric: ALL_SCALES.filter((s) => s.category === "symmetric"),
     exotic: ALL_SCALES.filter((s) => s.category === "exotic"),
     other: ALL_SCALES.filter((s) => s.category === "other"),
-  };
+  }), []);
 
   const renderArpButton = (arpId: string) => {
     const arp = ARPEGGIO_TYPES.find((a) => a.id === arpId);

@@ -480,7 +480,7 @@ export const CAGED_MINOR_SHAPES: CagedShapeTemplate[] = [
       { string: 4, fret: 3 }, // A string, C (R)
       { string: 3, fret: 5 }, // D string, G (5)
       { string: 2, fret: 5 }, // G string, C (R)
-      { string: 1, fret: 4 }, // B string, E (b3)
+      { string: 1, fret: 4 }, // B string, Eb (b3)
       { string: 0, fret: 3 }, // high E, G (5)
     ],
   },
@@ -703,14 +703,14 @@ export const getIntervalName = (interval: number) => {
   }
 };
 
-// Convert sharp note names to flat note names with small "b"
+// Convert sharp note names to flat note names using flat symbol (♭)
 export const formatNoteNameWithFlat = (noteName: string): string => {
   const sharpToFlat: Record<string, string> = {
-    "C#": "Dᵇ",
-    "D#": "Eᵇ",
-    "F#": "Gᵇ",
-    "G#": "Aᵇ",
-    "A#": "Bᵇ",
+    "C#": "D♭",
+    "D#": "E♭",
+    "F#": "G♭",
+    "G#": "A♭",
+    "A#": "B♭",
   };
   return sharpToFlat[noteName] || noteName;
 };
@@ -749,6 +749,12 @@ export const generateScaleFretboardMap = (
   numFrets = 15,
   tuning: number[] = STRING_TUNING
 ): FretNote[] => {
+  // Validate inputs
+  if (!rootNote || typeof rootNote !== 'string') return [];
+  if (!scaleId || typeof scaleId !== 'string') return [];
+  if (!Array.isArray(tuning) || tuning.length !== 6) return [];
+  if (typeof numFrets !== 'number' || numFrets < 0 || numFrets > 24) return [];
+
   const rootIndex = NOTES.indexOf(rootNote);
   const scale =
     SCALE_MODES.find((m) => m.id === scaleId) ||
@@ -790,12 +796,19 @@ export const generatePentatonicBoxFretboardMap = (
   numFrets = 24,
   tuning: number[] = STRING_TUNING
 ): FretNote[] => {
+  // Validate inputs
+  if (!rootNote || typeof rootNote !== 'string') return [];
+  if (!box || ![1, 2, 3, 4, 5].includes(box)) return [];
+  if (!Array.isArray(tuning) || tuning.length !== 6) return [];
+  if (typeof numFrets !== 'number' || numFrets < 0 || numFrets > 24) return [];
+
   // Only defined for minor pentatonic
   const allNotes = generateScaleFretboardMap(rootNote, "minPent", numFrets, tuning);
   if (!allNotes.length) return [];
 
   // Low E string in our tuning array is index 5 (notes defined High E -> Low E)
   const lowEIndex = tuning[5];
+  if (lowEIndex === undefined) return [];
   const rootFretOnLowE = findRootFretOnString(rootNote, lowEIndex, numFrets);
   if (rootFretOnLowE == null) return allNotes;
 
@@ -826,6 +839,11 @@ export const generateCagedFretboardMap = (
   shapeId: CagedShapeTemplate["id"],
   tuning: number[] = STRING_TUNING
 ): FretNote[] => {
+  // Validate inputs
+  if (!rootNote || typeof rootNote !== 'string') return [];
+  if (!shapeId) return [];
+  if (!Array.isArray(tuning) || tuning.length !== 6) return [];
+
   const targetRootIndex = NOTES.indexOf(rootNote);
   if (targetRootIndex === -1) return [];
 
@@ -898,7 +916,6 @@ const CAGED_SCALE_PATTERNS: Record<CagedShapeTemplate["id"], { string: number; f
     { string: 2, fret: 4, interval: 4 }, // G string, B (3)
     { string: 1, fret: 0, interval: 7 }, // B string, B (7)
     { string: 1, fret: 2, interval: 0 }, // B string, C# (R)
-    { string: 1, fret: 4, interval: 2 }, // B string, D# (2)
     { string: 0, fret: 0, interval: 7 }, // high E, E (7)
     { string: 0, fret: 2, interval: 0 }, // high E, F# (R)
   ],
@@ -915,7 +932,7 @@ const CAGED_SCALE_PATTERNS: Record<CagedShapeTemplate["id"], { string: number; f
     { string: 2, fret: 0, interval: 0 }, // G string, G (R)
     { string: 2, fret: 2, interval: 2 }, // G string, A (2)
     { string: 1, fret: 0, interval: 4 }, // B string, B (3)
-    { string: 1, fret: 2, interval: 5 }, // B string, C (4)
+    { string: 1, fret: 1, interval: 5 }, // B string, C (4)
     { string: 0, fret: 3, interval: 0 }, // high E, G (R)
     { string: 0, fret: 5, interval: 2 }, // high E, A (2)
   ],
@@ -953,7 +970,6 @@ const CAGED_SCALE_PATTERNS: Record<CagedShapeTemplate["id"], { string: number; f
     { string: 1, fret: 3, interval: 5 }, // B string, D (4)
     { string: 0, fret: 0, interval: 7 }, // high E, E (7)
     { string: 0, fret: 2, interval: 0 }, // high E, F# (R)
-    { string: 0, fret: 4, interval: 2 }, // high E, G# (2)
   ],
 };
 
@@ -1227,6 +1243,12 @@ export const generateLickFretboardMap = (
 };
 
 export const generateFretboardMap = (rootNote: string, typeId: string, numFrets = 15, tuning: number[] = STRING_TUNING) => {
+  // Validate inputs
+  if (!rootNote || typeof rootNote !== 'string') return [];
+  if (!typeId || typeof typeId !== 'string') return [];
+  if (!Array.isArray(tuning) || tuning.length !== 6) return [];
+  if (typeof numFrets !== 'number' || numFrets < 0 || numFrets > 24) return [];
+
   const rootIndex = NOTES.indexOf(rootNote);
   const arpeggio = ARPEGGIO_TYPES.find(t => t.id === typeId);
   
