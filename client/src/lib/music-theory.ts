@@ -143,6 +143,7 @@ export const ALL_SCALES: ScaleType[] = [
   { id: "inSen", name: "In Sen", intervals: [0, 1, 5, 7, 10], category: "exotic" },
   { id: "iwato", name: "Iwato", intervals: [0, 1, 5, 6, 10], category: "exotic" },
   { id: "yo", name: "Yo", intervals: [0, 2, 5, 7, 9], category: "exotic" },
+  { id: "scottish", name: "Scottish Pentatonic", intervals: [0, 2, 4, 5, 9], category: "exotic" },
   
   // Other common scales
   { id: "chromatic", name: "Chromatic", intervals: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11], category: "other" },
