@@ -100,59 +100,294 @@ export type ScaleType = {
   name: string;
   intervals: number[];
   category: "mode" | "pentatonic" | "minor" | "exotic" | "symmetric" | "other";
+  description?: string; // Historical context and usage information
 };
 
 export const ALL_SCALES: ScaleType[] = [
   // Modes (7-note)
-  { id: "ionian", name: "Ionian (Major)", intervals: [0, 2, 4, 5, 7, 9, 11], category: "mode" },
-  { id: "dorian", name: "Dorian", intervals: [0, 2, 3, 5, 7, 9, 10], category: "mode" },
-  { id: "phrygian", name: "Phrygian", intervals: [0, 1, 3, 5, 7, 8, 10], category: "mode" },
-  { id: "lydian", name: "Lydian", intervals: [0, 2, 4, 6, 7, 9, 11], category: "mode" },
-  { id: "mixolydian", name: "Mixolydian", intervals: [0, 2, 4, 5, 7, 9, 10], category: "mode" },
-  { id: "aeolian", name: "Aeolian (Natural Minor)", intervals: [0, 2, 3, 5, 7, 8, 10], category: "mode" },
-  { id: "locrian", name: "Locrian", intervals: [0, 1, 3, 5, 6, 8, 10], category: "mode" },
+  { 
+    id: "ionian", 
+    name: "Ionian (Major)", 
+    intervals: [0, 2, 4, 5, 7, 9, 11], 
+    category: "mode",
+    description: "The first mode of the major scale, dating back to ancient Greece. The foundation of Western music, used in countless classical, pop, and jazz compositions. Bright and stable."
+  },
+  { 
+    id: "dorian", 
+    name: "Dorian", 
+    intervals: [0, 2, 3, 5, 7, 9, 10], 
+    category: "mode",
+    description: "The second mode, with a minor third but major sixth. Popular in jazz (Miles Davis' 'So What'), rock, and folk music. Has a smooth, sophisticated minor quality."
+  },
+  { 
+    id: "phrygian", 
+    name: "Phrygian", 
+    intervals: [0, 1, 3, 5, 7, 8, 10], 
+    category: "mode",
+    description: "The third mode, characterized by a flattened second. Common in flamenco, metal, and film scores. Dark, exotic, and mysterious with Spanish/Middle Eastern flavor."
+  },
+  { 
+    id: "lydian", 
+    name: "Lydian", 
+    intervals: [0, 2, 4, 6, 7, 9, 11], 
+    category: "mode",
+    description: "The fourth mode with a raised fourth. Favored by composers like Debussy and modern film composers. Dreamy, floating, and ethereal—the 'dream sequence' scale."
+  },
+  { 
+    id: "mixolydian", 
+    name: "Mixolydian", 
+    intervals: [0, 2, 4, 5, 7, 9, 10], 
+    category: "mode",
+    description: "The fifth mode, major with a flattened seventh. Essential in blues, rock, country, and Celtic music. The 'rock and roll' scale—powerful yet approachable."
+  },
+  { 
+    id: "aeolian", 
+    name: "Aeolian (Natural Minor)", 
+    intervals: [0, 2, 3, 5, 7, 8, 10], 
+    category: "mode",
+    description: "The sixth mode, the natural minor scale. Used extensively in classical music, metal, and emotional ballads. Melancholic, introspective, and deeply expressive."
+  },
+  { 
+    id: "locrian", 
+    name: "Locrian", 
+    intervals: [0, 1, 3, 5, 6, 8, 10], 
+    category: "mode",
+    description: "The seventh mode, with a diminished fifth. Rarely used due to its unstable nature, but found in modern jazz and experimental music. Unsettling and dissonant."
+  },
   
   // Pentatonics
-  { id: "majPent", name: "Major Pentatonic", intervals: [0, 2, 4, 7, 9], category: "pentatonic" },
-  { id: "minPent", name: "Minor Pentatonic", intervals: [0, 3, 5, 7, 10], category: "pentatonic" },
-  { id: "blues", name: "Blues Scale", intervals: [0, 3, 5, 6, 7, 10], category: "pentatonic" },
+  { 
+    id: "majPent", 
+    name: "Major Pentatonic", 
+    intervals: [0, 2, 4, 7, 9], 
+    category: "pentatonic",
+    description: "Ancient five-note scale found worldwide—China, Scotland, Native America. Used in folk, country, and rock. Bright, open, and universally pleasing. No half-steps create a smooth, flowing sound."
+  },
+  { 
+    id: "minPent", 
+    name: "Minor Pentatonic", 
+    intervals: [0, 3, 5, 7, 10], 
+    category: "pentatonic",
+    description: "The most important scale in blues, rock, and metal. Used by guitar legends from B.B. King to Slash. Five notes that define rock guitar solos. Expressive and powerful."
+  },
+  { 
+    id: "blues", 
+    name: "Blues Scale", 
+    intervals: [0, 3, 5, 6, 7, 10], 
+    category: "pentatonic",
+    description: "Minor pentatonic with added 'blue note' (flattened fifth). The soul of blues music, creating that characteristic tension and release. Essential for blues, jazz, and rock improvisation."
+  },
   
   // Minor scales
-  { id: "harmonicMinor", name: "Harmonic Minor", intervals: [0, 2, 3, 5, 7, 8, 11], category: "minor" },
-  { id: "melodicMinor", name: "Melodic Minor (Ascending)", intervals: [0, 2, 3, 5, 7, 9, 11], category: "minor" },
-  { id: "dorianb2", name: "Dorian b2", intervals: [0, 1, 3, 5, 7, 9, 10], category: "minor" },
-  { id: "lydianAug", name: "Lydian Augmented", intervals: [0, 2, 4, 6, 8, 9, 11], category: "minor" },
-  { id: "lydianDom", name: "Lydian Dominant", intervals: [0, 2, 4, 6, 7, 9, 10], category: "minor" },
-  { id: "mixolydianb6", name: "Mixolydian b6", intervals: [0, 2, 4, 5, 7, 8, 10], category: "minor" },
-  { id: "locrian2", name: "Locrian #2", intervals: [0, 2, 3, 5, 6, 8, 10], category: "minor" },
-  { id: "altered", name: "Altered (Super Locrian)", intervals: [0, 1, 3, 4, 6, 8, 10], category: "minor" },
+  { 
+    id: "harmonicMinor", 
+    name: "Harmonic Minor", 
+    intervals: [0, 2, 3, 5, 7, 8, 11], 
+    category: "minor",
+    description: "Natural minor with raised seventh. Creates a strong leading tone, essential for V-i cadences in minor keys. Used in classical music, metal, and Middle Eastern music. Dramatic and intense."
+  },
+  { 
+    id: "melodicMinor", 
+    name: "Melodic Minor (Ascending)", 
+    intervals: [0, 2, 3, 5, 7, 9, 11], 
+    category: "minor",
+    description: "Natural minor with raised 6th and 7th ascending. Developed in classical music to avoid the awkward augmented second. Used extensively in jazz as a melodic minor mode. Smooth and elegant."
+  },
+  { 
+    id: "dorianb2", 
+    name: "Dorian b2", 
+    intervals: [0, 1, 3, 5, 7, 9, 10], 
+    category: "minor",
+    description: "Dorian mode with flattened second. Second mode of melodic minor. Used in modern jazz and fusion. Combines minor quality with exotic Phrygian-like flavor."
+  },
+  { 
+    id: "lydianAug", 
+    name: "Lydian Augmented", 
+    intervals: [0, 2, 4, 6, 8, 9, 11], 
+    category: "minor",
+    description: "Third mode of melodic minor. Lydian with raised fifth. Used in modern jazz (McCoy Tyner, Herbie Hancock). Creates floating, suspended, otherworldly sounds."
+  },
+  { 
+    id: "lydianDom", 
+    name: "Lydian Dominant", 
+    intervals: [0, 2, 4, 6, 7, 9, 10], 
+    category: "minor",
+    description: "Fourth mode of melodic minor. Mixolydian with raised fourth. The 'Lydian b7' scale, essential for dominant 7#11 chords in jazz. Bright yet bluesy."
+  },
+  { 
+    id: "mixolydianb6", 
+    name: "Mixolydian b6", 
+    intervals: [0, 2, 4, 5, 7, 8, 10], 
+    category: "minor",
+    description: "Fifth mode of melodic minor. Mixolydian with flattened sixth. Used over dominant chords in jazz. Creates a darker, more complex dominant sound."
+  },
+  { 
+    id: "locrian2", 
+    name: "Locrian #2", 
+    intervals: [0, 2, 3, 5, 6, 8, 10], 
+    category: "minor",
+    description: "Sixth mode of melodic minor. Locrian with natural second. Used over half-diminished chords in jazz. More usable than pure Locrian due to the natural second."
+  },
+  { 
+    id: "altered", 
+    name: "Altered (Super Locrian)", 
+    intervals: [0, 1, 3, 4, 6, 8, 10], 
+    category: "minor",
+    description: "Seventh mode of melodic minor. The 'altered dominant' scale, used over altered dominant chords in jazz. Contains all possible alterations (b9, #9, #11, b13). Intense and dissonant."
+  },
   
   // Symmetric scales
-  { id: "wholeTone", name: "Whole Tone", intervals: [0, 2, 4, 6, 8, 10], category: "symmetric" },
-  { id: "dimHalfWhole", name: "Diminished (Half-Whole)", intervals: [0, 1, 3, 4, 6, 7, 9, 10], category: "symmetric" },
-  { id: "dimWholeHalf", name: "Diminished (Whole-Half)", intervals: [0, 2, 3, 5, 6, 8, 9, 11], category: "symmetric" },
+  { 
+    id: "wholeTone", 
+    name: "Whole Tone", 
+    intervals: [0, 2, 4, 6, 8, 10], 
+    category: "symmetric",
+    description: "All whole steps, no half steps. Used by Debussy ('Voiles'), jazz musicians, and film composers for dream sequences. Ambiguous, floating, and mysterious. Only two distinct whole-tone scales exist."
+  },
+  { 
+    id: "dimHalfWhole", 
+    name: "Diminished (Half-Whole)", 
+    intervals: [0, 1, 3, 4, 6, 7, 9, 10], 
+    category: "symmetric",
+    description: "Symmetric eight-note scale alternating half and whole steps. Used over diminished chords and in jazz. Creates tension and movement. Used by bebop musicians and modern composers."
+  },
+  { 
+    id: "dimWholeHalf", 
+    name: "Diminished (Whole-Half)", 
+    intervals: [0, 2, 3, 5, 6, 8, 9, 11], 
+    category: "symmetric",
+    description: "Symmetric eight-note scale alternating whole and half steps. Another diminished scale variant. Used in jazz and classical music for its symmetrical properties and tension-building qualities."
+  },
   
   // Exotic/World scales
-  { id: "hungarianMinor", name: "Hungarian Minor", intervals: [0, 2, 3, 6, 7, 8, 11], category: "exotic" },
-  { id: "neapolitanMinor", name: "Neapolitan Minor", intervals: [0, 1, 3, 5, 7, 8, 11], category: "exotic" },
-  { id: "neapolitanMajor", name: "Neapolitan Major", intervals: [0, 1, 3, 5, 7, 9, 11], category: "exotic" },
-  { id: "doubleHarmonic", name: "Double Harmonic", intervals: [0, 1, 4, 5, 7, 8, 11], category: "exotic" },
-  { id: "persian", name: "Persian", intervals: [0, 1, 4, 5, 6, 8, 11], category: "exotic" },
-  { id: "enigmatic", name: "Enigmatic", intervals: [0, 1, 4, 6, 8, 10, 11], category: "exotic" },
-  { id: "hirajoshi", name: "Hirajoshi", intervals: [0, 2, 3, 7, 8], category: "exotic" },
-  { id: "inSen", name: "In Sen", intervals: [0, 1, 5, 7, 10], category: "exotic" },
-  { id: "iwato", name: "Iwato", intervals: [0, 1, 5, 6, 10], category: "exotic" },
-  { id: "yo", name: "Yo", intervals: [0, 2, 5, 7, 9], category: "exotic" },
-  { id: "scottish", name: "Scottish Pentatonic", intervals: [0, 2, 4, 5, 9], category: "exotic" },
+  { 
+    id: "hungarianMinor", 
+    name: "Hungarian Minor", 
+    intervals: [0, 2, 3, 6, 7, 8, 11], 
+    category: "exotic",
+    description: "Also called 'Gypsy Minor' or 'Double Harmonic Minor'. Features augmented second intervals. Used in Hungarian folk music, Middle Eastern music, and film scores. Exotic and dramatic."
+  },
+  { 
+    id: "neapolitanMinor", 
+    name: "Neapolitan Minor", 
+    intervals: [0, 1, 3, 5, 7, 8, 11], 
+    category: "exotic",
+    description: "Natural minor with flattened second. Named after the Neapolitan school of composition. Used in classical music and film scores. Dark and mysterious with Italian operatic character."
+  },
+  { 
+    id: "neapolitanMajor", 
+    name: "Neapolitan Major", 
+    intervals: [0, 1, 3, 5, 7, 9, 11], 
+    category: "exotic",
+    description: "Major scale with flattened second. Another scale from the Neapolitan school. Used in classical and film music. Creates a unique, slightly exotic major sound."
+  },
+  { 
+    id: "doubleHarmonic", 
+    name: "Double Harmonic", 
+    intervals: [0, 1, 4, 5, 7, 8, 11], 
+    category: "exotic",
+    description: "Also called 'Byzantine' or 'Arabic' scale. Features two augmented seconds. Found in Middle Eastern, Eastern European, and flamenco music. Highly exotic and expressive."
+  },
+  { 
+    id: "persian", 
+    name: "Persian", 
+    intervals: [0, 1, 4, 5, 6, 8, 11], 
+    category: "exotic",
+    description: "Traditional Persian scale with unique interval structure. Used in Persian classical music and Middle Eastern compositions. Mysterious and culturally rich."
+  },
+  { 
+    id: "enigmatic", 
+    name: "Enigmatic", 
+    intervals: [0, 1, 4, 6, 8, 10, 11], 
+    category: "exotic",
+    description: "Created by Italian composer Giuseppe Verdi for his 'Ave Maria'. Features unusual intervals. Rarely used but creates a truly enigmatic, otherworldly sound."
+  },
+  { 
+    id: "hirajoshi", 
+    name: "Hirajoshi", 
+    intervals: [0, 2, 3, 7, 8], 
+    category: "exotic",
+    description: "Japanese pentatonic scale used in traditional Japanese music. One of the most important scales in Japanese music theory. Peaceful, meditative, and culturally significant."
+  },
+  { 
+    id: "inSen", 
+    name: "In Sen", 
+    intervals: [0, 1, 5, 7, 10], 
+    category: "exotic",
+    description: "Another Japanese pentatonic scale, used in traditional music and modern compositions. Different character from Hirajoshi—more angular and distinctive."
+  },
+  { 
+    id: "iwato", 
+    name: "Iwato", 
+    intervals: [0, 1, 5, 6, 10], 
+    category: "exotic",
+    description: "Japanese pentatonic scale with unique interval pattern. Used in traditional Japanese music. Creates a distinctive, contemplative sound."
+  },
+  { 
+    id: "yo", 
+    name: "Yo", 
+    intervals: [0, 2, 5, 7, 9], 
+    category: "exotic",
+    description: "Japanese pentatonic scale, one of the primary scales in Japanese music. Used extensively in traditional and modern Japanese compositions. Bright and open."
+  },
+  { 
+    id: "scottish", 
+    name: "Scottish Pentatonic", 
+    intervals: [0, 2, 4, 5, 9], 
+    category: "exotic",
+    description: "Also called Scottish Gaelic scale. Found in traditional Scottish and Irish music, especially pipe tunes. Like major scale without 5th and 7th. Haunting, yearning quality—used in 'Loch Lomond' and 'Skye Boat Song'."
+  },
   
   // Other common scales
-  { id: "chromatic", name: "Chromatic", intervals: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11], category: "other" },
-  { id: "majorBebop", name: "Major Bebop", intervals: [0, 2, 4, 5, 7, 8, 9, 11], category: "other" },
-  { id: "dominantBebop", name: "Dominant Bebop", intervals: [0, 2, 4, 5, 7, 9, 10, 11], category: "other" },
-  { id: "minorBebop", name: "Minor Bebop", intervals: [0, 2, 3, 4, 5, 7, 9, 10], category: "other" },
-  { id: "augmented", name: "Augmented", intervals: [0, 3, 4, 7, 8, 11], category: "other" },
-  { id: "prometheus", name: "Prometheus", intervals: [0, 2, 4, 6, 9, 10], category: "other" },
-  { id: "tritone", name: "Tritone", intervals: [0, 1, 4, 6, 7, 10], category: "other" },
+  { 
+    id: "chromatic", 
+    name: "Chromatic", 
+    intervals: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11], 
+    category: "other",
+    description: "All twelve semitones. The complete set of Western pitches. Used for passing tones, chromaticism, and in serialist music. Creates maximum tension and color."
+  },
+  { 
+    id: "majorBebop", 
+    name: "Major Bebop", 
+    intervals: [0, 2, 4, 5, 7, 8, 9, 11], 
+    category: "other",
+    description: "Major scale with added passing tone (major 6th). Developed by bebop musicians in the 1940s to create smoother lines. Used extensively in jazz improvisation."
+  },
+  { 
+    id: "dominantBebop", 
+    name: "Dominant Bebop", 
+    intervals: [0, 2, 4, 5, 7, 9, 10, 11], 
+    category: "other",
+    description: "Mixolydian with added passing tone (major 7th). Essential bebop scale for dominant chords. Used by Charlie Parker, Dizzy Gillespie, and all bebop musicians."
+  },
+  { 
+    id: "minorBebop", 
+    name: "Minor Bebop", 
+    intervals: [0, 2, 3, 4, 5, 7, 9, 10], 
+    category: "other",
+    description: "Natural minor with added passing tone (major 3rd). Another bebop innovation for smoother minor key lines. Used in jazz over minor chords and progressions."
+  },
+  { 
+    id: "augmented", 
+    name: "Augmented", 
+    intervals: [0, 3, 4, 7, 8, 11], 
+    category: "other",
+    description: "Symmetric scale built on augmented triads. Used in classical music (Liszt, Scriabin) and jazz. Creates a floating, ambiguous, dreamlike quality."
+  },
+  { 
+    id: "prometheus", 
+    name: "Prometheus", 
+    intervals: [0, 2, 4, 6, 9, 10], 
+    category: "other",
+    description: "Also called 'Mystic' scale. Created by Russian composer Alexander Scriabin. Used in his late works. Mysterious and mystical, associated with theosophy."
+  },
+  { 
+    id: "tritone", 
+    name: "Tritone", 
+    intervals: [0, 1, 4, 6, 7, 10], 
+    category: "other",
+    description: "Scale built around the tritone interval. Used in modern jazz and experimental music. Creates maximum dissonance and tension. The 'devil's interval' scale."
+  },
 ];
 
 // CAGED major triad chord shapes, defined for their natural open chord

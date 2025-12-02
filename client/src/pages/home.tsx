@@ -553,7 +553,9 @@ export default function Home() {
                   }}
                 >
                   <SelectTrigger className="w-full">
-                    <SelectValue placeholder="Choose scale" />
+                    <SelectValue placeholder="Choose scale">
+                      {selectedScaleId && ALL_SCALES.find((s) => s.id === selectedScaleId)?.name}
+                    </SelectValue>
                   </SelectTrigger>
                   <SelectContent className="max-h-72 overflow-y-auto">
                     <SelectItem value="none">None</SelectItem>
@@ -573,8 +575,20 @@ export default function Home() {
                             {categoryLabels[category]}
                           </div>
                           {scales.map((s) => (
-                            <SelectItem key={s.id} value={s.id}>
-                              {s.name}
+                            <SelectItem 
+                              key={s.id} 
+                              value={s.id}
+                              className="py-3 h-auto min-h-[60px]"
+                              textValue={s.name}
+                            >
+                              <div className="flex flex-col items-start w-full pr-6 pointer-events-none">
+                                <span className="font-medium text-sm">{s.name}</span>
+                                {s.description && (
+                                  <span className="text-[10px] text-muted-foreground/70 mt-1 leading-tight line-clamp-2">
+                                    {s.description}
+                                  </span>
+                                )}
+                              </div>
                             </SelectItem>
                           ))}
                         </React.Fragment>
