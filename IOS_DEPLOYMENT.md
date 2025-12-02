@@ -71,9 +71,9 @@ open ios/App/App.xcworkspace
 2. Update:
    - **Display Name**: ArpVision
    - **Bundle Identifier**: `com.kemckai.arpvision` (or your own)
-   - **Version**: 2.1.0
-   - **Build**: 1
-   - **Minimum Deployments**: iOS 13.0 (recommended)
+   - **Version**: 2.3.0
+   - **Build**: 3
+   - **Minimum Deployments**: iOS 14.0 (recommended)
 
 ### 4. Add App Icons
 
@@ -161,9 +161,15 @@ Create a short video (15-30 seconds) showing the app in action.
 
 ### 6. Version Information
 
-- **Version**: 2.1.0
+- **Version**: 2.3.0
 - **Copyright**: © 2024 Your Name
-- **What's New**: Initial release of ArpVision for iOS
+- **What's New**: 
+  - Performance optimizations with React memoization
+  - Optimized Fretboard component with Map/Set lookups
+  - Comprehensive input validation and error handling
+  - Fixed flat symbol rendering (♭)
+  - Verified all music theory intervals and CAGED shapes
+  - Minor CAGED shapes and scale patterns support
 
 ### 7. Submit for Review
 
