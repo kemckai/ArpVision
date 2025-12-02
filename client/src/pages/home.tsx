@@ -5,12 +5,16 @@ import {
   generateLickFretboardMap,
   generateScaleFretboardMap,
   generateCagedFretboardMap,
+  generateCagedScaleFretboardMap,
+  generateCagedMinorFretboardMap,
+  generateCagedMinorScaleFretboardMap,
   generatePentatonicBoxFretboardMap,
   NOTES,
   ARPEGGIO_TYPES,
   SCALE_MODES,
   SCALE_PENTATONICS,
   CAGED_SHAPES,
+  CAGED_MINOR_SHAPES,
   ALL_SCALES,
   FAMOUS_LICKS,
   Lick,
@@ -46,6 +50,8 @@ export default function Home() {
   const [activeModeId, setActiveModeId] = useState<string | null>(null);
   const [activePentatonicId, setActivePentatonicId] = useState<string | null>(null);
   const [activeCagedId, setActiveCagedId] = useState<string | null>(null);
+  const [cagedMode, setCagedMode] = useState<"triad" | "scale">("triad"); // CAGED triad or scale
+  const [cagedQuality, setCagedQuality] = useState<"major" | "minor">("major"); // CAGED major or minor
   const [activePentBox, setActivePentBox] = useState<1 | 2 | 3 | 4 | 5 | null>(null);
   const [selectedScaleId, setSelectedScaleId] = useState<string | null>(null);
   const [currentTuning, setCurrentTuning] = useState(TUNINGS[0]);
@@ -58,7 +64,13 @@ export default function Home() {
         currentTuning.notes
       )
     : activeCagedId
-    ? generateCagedFretboardMap(root, activeCagedId, currentTuning.notes)
+    ? cagedQuality === "minor"
+      ? cagedMode === "scale"
+        ? generateCagedMinorScaleFretboardMap(root, activeCagedId as "C" | "A" | "G" | "E" | "D", 19, currentTuning.notes)
+        : generateCagedMinorFretboardMap(root, activeCagedId, currentTuning.notes)
+      : cagedMode === "scale"
+      ? generateCagedScaleFretboardMap(root, activeCagedId as "C" | "A" | "G" | "E" | "D", 19, currentTuning.notes)
+      : generateCagedFretboardMap(root, activeCagedId, currentTuning.notes)
     : activePentatonicId === "minPent" && activePentBox
     ? generatePentatonicBoxFretboardMap(
         root,
@@ -91,7 +103,9 @@ export default function Home() {
     ? SCALE_PENTATONICS.find((p) => p.id === activePentatonicId)
     : null;
   const currentCagedShape = activeCagedId
-    ? CAGED_SHAPES.find((s) => s.id === activeCagedId)
+    ? (cagedQuality === "minor"
+        ? CAGED_MINOR_SHAPES.find((s) => s.id === activeCagedId)
+        : CAGED_SHAPES.find((s) => s.id === activeCagedId))
     : null;
 
   // Human-readable label for what's on the fretboard
@@ -100,7 +114,9 @@ export default function Home() {
       return `${activeLick.artist} – ${activeLick.name}`;
     }
     if (currentCagedShape) {
-      return `${root} Major – ${currentCagedShape.name}`;
+      const quality = cagedQuality === "minor" ? "Minor" : "Major";
+      const type = cagedMode === "scale" ? " Scale" : "";
+      return `${root} ${quality}${type}  –  ${currentCagedShape.name}`;
     }
     if (currentScale) {
       return `${root} ${currentScale.name}`;
@@ -131,10 +147,31 @@ export default function Home() {
       : currentCagedShape
       ? Array.from(
           new Map(
-            generateCagedFretboardMap(
-              root,
-              currentCagedShape.id,
-              currentTuning.notes
+            (cagedQuality === "minor"
+              ? cagedMode === "scale"
+                ? generateCagedMinorScaleFretboardMap(
+                    root,
+                    currentCagedShape.id,
+                    19,
+                    currentTuning.notes
+                  )
+                : generateCagedMinorFretboardMap(
+                    root,
+                    currentCagedShape.id,
+                    currentTuning.notes
+                  )
+              : cagedMode === "scale"
+              ? generateCagedScaleFretboardMap(
+                  root,
+                  currentCagedShape.id,
+                  19,
+                  currentTuning.notes
+                )
+              : generateCagedFretboardMap(
+                  root,
+                  currentCagedShape.id,
+                  currentTuning.notes
+                )
             ).map((n) => [
               n.noteIndex,
               { noteName: n.noteName, interval: n.interval },
@@ -236,31 +273,31 @@ export default function Home() {
         variant={type === arp.id && !activeLick ? "secondary" : "ghost"}
         onClick={() => handleManualChange(() => setType(arp.id))}
         className={cn(
-          "justify-start text-left h-auto py-3 px-4 transition-all w-full mb-2 group",
+          "justify-start text-left h-auto py-3.5 px-4 transition-all w-full mb-3 group",
           type === arp.id && !activeLick
             ? "bg-accent text-accent-foreground border-l-4 border-primary"
             : "hover:bg-accent/50 text-muted-foreground"
         )}
       >
-        <div className="flex flex-col items-start w-full">
-          <div className="flex justify-between w-full">
+        <div className="flex items-center justify-between w-full gap-3">
+          <div className="flex items-center gap-4 flex-1 min-w-0">
             <span
               className={cn(
-                "font-bold group-hover:text-foreground",
+                "font-bold group-hover:text-foreground whitespace-nowrap",
                 type === arp.id && !activeLick ? "text-primary" : ""
               )}
             >
               {arp.name}
             </span>
-            {type === arp.id && !activeLick && (
-              <div className="w-2 h-2 rounded-full bg-primary mt-1.5 animate-pulse" />
-            )}
+            <span className="text-xs opacity-70 font-mono text-muted-foreground/80 group-hover:text-muted-foreground whitespace-nowrap">
+              {arp.intervals
+                .map((i) => (i === 0 ? "R" : getIntervalName(i)))
+                .join(" - ")}
+            </span>
           </div>
-          <span className="text-xs opacity-70 font-mono mt-1 text-muted-foreground/80 group-hover:text-muted-foreground">
-            {arp.intervals
-              .map((i) => (i === 0 ? "R" : getIntervalName(i)))
-              .join(" - ")}
-          </span>
+          {type === arp.id && !activeLick && (
+            <div className="w-2 h-2 rounded-full bg-primary animate-pulse flex-shrink-0" />
+          )}
         </div>
       </Button>
     );
@@ -285,31 +322,31 @@ export default function Home() {
           setSelectedScaleId(null);
         }}
         className={cn(
-          "justify-start text-left h-auto py-3 px-4 transition-all w-full mb-2 group",
+          "justify-start text-left h-auto py-3.5 px-4 transition-all w-full mb-3 group",
           activeModeId === mode.id && !activeLick
             ? "bg-accent text-accent-foreground border-l-4 border-primary"
             : "hover:bg-accent/50 text-muted-foreground"
         )}
       >
-        <div className="flex flex-col items-start w-full">
-          <div className="flex justify-between w-full">
+        <div className="flex items-center justify-between w-full gap-3">
+          <div className="flex items-center gap-4 flex-1 min-w-0">
             <span
               className={cn(
-                "font-bold group-hover:text-foreground",
+                "font-bold group-hover:text-foreground whitespace-nowrap",
                 activeModeId === mode.id && !activeLick ? "text-primary" : ""
               )}
             >
               {mode.name}
             </span>
-            {activeModeId === mode.id && !activeLick && (
-              <div className="w-2 h-2 rounded-full bg-primary mt-1.5 animate-pulse" />
-            )}
+            <span className="text-xs opacity-70 font-mono text-muted-foreground/80 group-hover:text-muted-foreground whitespace-nowrap">
+              {mode.intervals
+                .map((i) => (i === 0 ? "R" : getIntervalName(i)))
+                .join(" - ")}
+            </span>
           </div>
-          <span className="text-xs opacity-70 font-mono mt-1 text-muted-foreground/80 group-hover:text-muted-foreground">
-            {mode.intervals
-              .map((i) => (i === 0 ? "R" : getIntervalName(i)))
-              .join(" - ")}
-          </span>
+          {activeModeId === mode.id && !activeLick && (
+            <div className="w-2 h-2 rounded-full bg-primary animate-pulse flex-shrink-0" />
+          )}
         </div>
       </Button>
     );
@@ -333,17 +370,17 @@ export default function Home() {
           setSelectedScaleId(null);
         }}
         className={cn(
-          "justify-start text-left h-auto py-3 px-4 transition-all w-full mb-2 group",
+          "justify-start text-left h-auto py-3.5 px-4 transition-all w-full mb-3 group",
           activePentatonicId === pent.id && !activeLick
             ? "bg-accent text-accent-foreground border-l-4 border-primary"
             : "hover:bg-accent/50 text-muted-foreground"
         )}
       >
-        <div className="flex flex-col items-start w-full">
-          <div className="flex justify-between w-full">
+        <div className="flex items-center justify-between w-full gap-3">
+          <div className="flex items-center gap-4 flex-1 min-w-0">
             <span
               className={cn(
-                "font-bold group-hover:text-foreground",
+                "font-bold group-hover:text-foreground whitespace-nowrap",
                 activePentatonicId === pent.id && !activeLick
                   ? "text-primary"
                   : ""
@@ -351,22 +388,24 @@ export default function Home() {
             >
               {pent.name}
             </span>
-            {activePentatonicId === pent.id && !activeLick && (
-              <div className="w-2 h-2 rounded-full bg-primary mt-1.5 animate-pulse" />
-            )}
+            <span className="text-xs opacity-70 font-mono text-muted-foreground/80 group-hover:text-muted-foreground whitespace-nowrap">
+              {pent.intervals
+                .map((i) => (i === 0 ? "R" : getIntervalName(i)))
+                .join(" - ")}
+            </span>
           </div>
-          <span className="text-xs opacity-70 font-mono mt-1 text-muted-foreground/80 group-hover:text-muted-foreground">
-            {pent.intervals
-              .map((i) => (i === 0 ? "R" : getIntervalName(i)))
-              .join(" - ")}
-          </span>
+          {activePentatonicId === pent.id && !activeLick && (
+            <div className="w-2 h-2 rounded-full bg-primary animate-pulse flex-shrink-0" />
+          )}
         </div>
       </Button>
     );
   };
 
   const renderCagedButton = (shapeId: string) => {
-    const shape = CAGED_SHAPES.find((s) => s.id === shapeId);
+    const shape = cagedQuality === "minor"
+      ? CAGED_MINOR_SHAPES.find((s) => s.id === shapeId)
+      : CAGED_SHAPES.find((s) => s.id === shapeId);
     if (!shape) return null;
 
     return (
@@ -384,29 +423,35 @@ export default function Home() {
           setSelectedScaleId(null);
         }}
         className={cn(
-          "justify-start text-left h-auto py-3 px-4 transition-all w-full mb-2 group",
+          "justify-start text-left h-auto py-3.5 px-4 transition-all w-full mb-3 group",
           activeCagedId === shape.id && !activeLick
             ? "bg-accent text-accent-foreground border-l-4 border-primary"
             : "hover:bg-accent/50 text-muted-foreground"
         )}
       >
-        <div className="flex flex-col items-start w-full">
-          <div className="flex justify-between w-full">
+        <div className="flex items-center justify-between w-full gap-3">
+          <div className="flex items-center gap-4 flex-1 min-w-0">
             <span
               className={cn(
-                "font-bold group-hover:text-foreground",
+                "font-bold group-hover:text-foreground whitespace-nowrap",
                 activeCagedId === shape.id && !activeLick ? "text-primary" : ""
               )}
             >
               {shape.name}
             </span>
-            {activeCagedId === shape.id && !activeLick && (
-              <div className="w-2 h-2 rounded-full bg-primary mt-1.5 animate-pulse" />
-            )}
+            <span className="text-xs opacity-70 font-mono text-muted-foreground/80 group-hover:text-muted-foreground whitespace-nowrap">
+              {cagedMode === "scale"
+                ? cagedQuality === "minor"
+                  ? "R - 2 - b3 - 4 - 5 - b6 - b7"
+                  : "R - 2 - 3 - 4 - 5 - 6 - 7"
+                : cagedQuality === "minor"
+                ? "R - b3 - 5"
+                : "R - 3 - 5"}
+            </span>
           </div>
-          <span className="text-xs opacity-70 font-mono mt-1 text-muted-foreground/80 group-hover:text-muted-foreground">
-            R - 3 - 5
-          </span>
+          {activeCagedId === shape.id && !activeLick && (
+            <div className="w-2 h-2 rounded-full bg-primary animate-pulse flex-shrink-0" />
+          )}
         </div>
       </Button>
     );
@@ -627,31 +672,31 @@ export default function Home() {
                     <ScrollArea className="h-full w-full p-2">
                       <TabsContent
                         value="triads"
-                        className="mt-0 space-y-1 border-none focus-visible:ring-0"
+                        className="mt-0 space-y-2 border-none focus-visible:ring-0"
                       >
                         {triads.map(renderArpButton)}
                       </TabsContent>
                       <TabsContent
                         value="7ths"
-                        className="mt-0 space-y-1 border-none focus-visible:ring-0"
+                        className="mt-0 space-y-2 border-none focus-visible:ring-0"
                       >
                         {sevenths.map(renderArpButton)}
                       </TabsContent>
                       <TabsContent
                         value="extended"
-                        className="mt-0 space-y-1 border-none focus-visible:ring-0"
+                        className="mt-0 space-y-2 border-none focus-visible:ring-0"
                       >
                         {extended.map(renderArpButton)}
                       </TabsContent>
                       <TabsContent
                         value="modes"
-                        className="mt-0 space-y-1 border-none focus-visible:ring-0"
+                        className="mt-0 space-y-2 border-none focus-visible:ring-0"
                       >
                         {SCALE_MODES.map((m) => renderModeButton(m.id))}
                       </TabsContent>
                       <TabsContent
                         value="pents"
-                        className="mt-0 space-y-1 border-none focus-visible:ring-0"
+                        className="mt-0 space-y-2 border-none focus-visible:ring-0"
                       >
                         {SCALE_PENTATONICS.map((p) => renderPentButton(p.id))}
                         {activePentatonicId === "minPent" && (
@@ -682,20 +727,64 @@ export default function Home() {
                       </TabsContent>
                       <TabsContent
                         value="caged"
-                        className="mt-0 space-y-1 border-none focus-visible:ring-0"
+                        className="mt-0 space-y-2 border-none focus-visible:ring-0"
                       >
+                        <div className="mb-3 pb-3 border-b border-white/10 space-y-3">
+                          <div>
+                            <div className="text-xs font-mono uppercase tracking-wider text-muted-foreground mb-2">
+                              Quality
+                            </div>
+                            <div className="grid grid-cols-2 gap-2">
+                              <Button
+                                variant={cagedQuality === "major" ? "default" : "outline"}
+                                onClick={() => setCagedQuality("major")}
+                                className="text-xs h-8"
+                              >
+                                Major
+                              </Button>
+                              <Button
+                                variant={cagedQuality === "minor" ? "default" : "outline"}
+                                onClick={() => setCagedQuality("minor")}
+                                className="text-xs h-8"
+                              >
+                                Minor
+                              </Button>
+                            </div>
+                          </div>
+                          <div>
+                            <div className="text-xs font-mono uppercase tracking-wider text-muted-foreground mb-2">
+                              Type
+                            </div>
+                            <div className="grid grid-cols-2 gap-2">
+                              <Button
+                                variant={cagedMode === "triad" ? "default" : "outline"}
+                                onClick={() => setCagedMode("triad")}
+                                className="text-xs h-8"
+                              >
+                                Triads
+                              </Button>
+                              <Button
+                                variant={cagedMode === "scale" ? "default" : "outline"}
+                                onClick={() => setCagedMode("scale")}
+                                className="text-xs h-8"
+                              >
+                                Scales
+                              </Button>
+                            </div>
+                          </div>
+                        </div>
                         {CAGED_SHAPES.map((s) => renderCagedButton(s.id))}
                       </TabsContent>
                       <TabsContent
                         value="licks"
-                        className="mt-0 space-y-3 border-none focus-visible:ring-0 p-1"
+                        className="mt-0 space-y-3 border-none focus-visible:ring-0 p-2"
                       >
                         {FAMOUS_LICKS.map((lick) => (
                           <div
                             key={lick.id}
                             onClick={() => selectLick(lick)}
                             className={cn(
-                              "p-4 rounded-lg border cursor-pointer transition-all hover:scale-[1.02] group relative overflow-hidden",
+                              "p-5 rounded-lg border cursor-pointer transition-all hover:scale-[1.02] group relative overflow-hidden",
                               activeLick?.id === lick.id
                                 ? "bg-orange-950/40 border-orange-500/50 shadow-lg shadow-orange-900/20"
                                 : "bg-secondary/30 border-white/5 hover:bg-secondary/60 hover:border-white/10"
@@ -705,10 +794,10 @@ export default function Home() {
                               <div className="absolute inset-0 bg-gradient-to-r from-orange-500/10 to-transparent pointer-events-none" />
                             )}
 
-                            <div className="flex justify-between items-start mb-1">
+                            <div className="flex justify-between items-start mb-3 gap-3">
                               <h4
                                 className={cn(
-                                  "font-bold font-display uppercase tracking-wide",
+                                  "font-bold font-display uppercase tracking-wide flex-1 min-w-0 pr-2 break-words",
                                   activeLick?.id === lick.id
                                     ? "text-orange-400"
                                     : "text-foreground"
@@ -717,13 +806,13 @@ export default function Home() {
                                 {lick.artist}
                               </h4>
                               {activeLick?.id === lick.id && (
-                                <Flame className="w-4 h-4 text-orange-500 animate-pulse" />
+                                <Flame className="w-4 h-4 text-orange-500 animate-pulse flex-shrink-0 mt-0.5" />
                               )}
                             </div>
-                            <div className="text-sm font-medium text-muted-foreground mb-2">
+                            <div className="text-sm font-medium text-muted-foreground mb-3 break-words">
                               {lick.name}
                             </div>
-                            <div className="flex gap-2 mb-2">
+                            <div className="flex gap-2 mb-3">
                               <Badge
                                 variant="outline"
                                 className="bg-black/40 text-[10px] border-white/10"
@@ -731,7 +820,7 @@ export default function Home() {
                                 {lick.root} {lick.type}
                               </Badge>
                             </div>
-                            <p className="text-xs text-muted-foreground/70 italic leading-relaxed">
+                            <p className="text-xs text-muted-foreground/70 italic leading-relaxed break-words">
                               "{lick.description}"
                             </p>
                           </div>

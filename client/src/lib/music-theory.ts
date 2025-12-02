@@ -469,6 +469,76 @@ export const CAGED_SHAPES: CagedShapeTemplate[] = [
   },
 ];
 
+// CAGED minor triad chord shapes (R-b3-5)
+export const CAGED_MINOR_SHAPES: CagedShapeTemplate[] = [
+  {
+    id: "C",
+    name: "C shape (minor)",
+    baseRoot: "C",
+    // C minor: x 3 5 5 4 3
+    positions: [
+      { string: 4, fret: 3 }, // A string, C (R)
+      { string: 3, fret: 5 }, // D string, G (5)
+      { string: 2, fret: 5 }, // G string, C (R)
+      { string: 1, fret: 4 }, // B string, E (b3)
+      { string: 0, fret: 3 }, // high E, G (5)
+    ],
+  },
+  {
+    id: "A",
+    name: "A shape (minor)",
+    baseRoot: "A",
+    // A minor: x 0 2 2 1 0
+    positions: [
+      { string: 4, fret: 0 }, // A string, A (R)
+      { string: 3, fret: 2 }, // D string, E (5)
+      { string: 2, fret: 2 }, // G string, A (R)
+      { string: 1, fret: 1 }, // B string, C (b3)
+      { string: 0, fret: 0 }, // high E, E (5)
+    ],
+  },
+  {
+    id: "G",
+    name: "G shape (minor)",
+    baseRoot: "G",
+    // G minor: 3 5 5 3 3 3
+    positions: [
+      { string: 5, fret: 3 }, // low E, G (R)
+      { string: 4, fret: 5 }, // A, C (b3)
+      { string: 3, fret: 5 }, // D, G (R)
+      { string: 2, fret: 3 }, // G, Bb (b3)
+      { string: 1, fret: 3 }, // B, D (5)
+      { string: 0, fret: 3 }, // high E, G (R)
+    ],
+  },
+  {
+    id: "E",
+    name: "E shape (minor)",
+    baseRoot: "E",
+    // E minor: 0 2 2 0 0 0
+    positions: [
+      { string: 5, fret: 0 }, // low E, E (R)
+      { string: 4, fret: 2 }, // A, B (5)
+      { string: 3, fret: 2 }, // D, E (R)
+      { string: 2, fret: 0 }, // G, G (b3)
+      { string: 1, fret: 0 }, // B, B (5)
+      { string: 0, fret: 0 }, // high E, E (R)
+    ],
+  },
+  {
+    id: "D",
+    name: "D shape (minor)",
+    baseRoot: "D",
+    // D minor: x x 0 2 3 1
+    positions: [
+      { string: 3, fret: 0 }, // D, D (R)
+      { string: 2, fret: 2 }, // G, A (5)
+      { string: 1, fret: 3 }, // B, D (R)
+      { string: 0, fret: 1 }, // high E, F (b3)
+    ],
+  },
+];
+
 export type Lick = {
   id: string;
   artist: string;
@@ -780,6 +850,334 @@ export const generateCagedFretboardMap = (
 
     // Only keep 1–3–5 triad tones for the major chord
     if (![0, 4, 7].includes(interval)) return;
+
+    result.push({
+      noteIndex: currentNoteIndex,
+      noteName: NOTES[currentNoteIndex],
+      interval,
+      intervalName: getIntervalName(interval),
+      fret,
+      string: pos.string,
+      isRoot: interval === 0,
+    });
+  });
+
+  return result;
+};
+
+// CAGED scale patterns - full major scale positions for each CAGED shape
+// These define the "box" patterns for major scales based on each CAGED chord shape
+const CAGED_SCALE_PATTERNS: Record<CagedShapeTemplate["id"], { string: number; fret: number; interval: number }[]> = {
+  C: [
+    // C shape major scale pattern (around open C position)
+    { string: 5, fret: 3, interval: 5 }, // E string, G (5)
+    { string: 4, fret: 0, interval: 0 }, // A string, C (R)
+    { string: 4, fret: 2, interval: 2 }, // A string, D (2)
+    { string: 4, fret: 3, interval: 3 }, // A string, E (3)
+    { string: 3, fret: 0, interval: 5 }, // D string, D (5)
+    { string: 3, fret: 2, interval: 7 }, // D string, E (7)
+    { string: 2, fret: 0, interval: 0 }, // G string, G (R)
+    { string: 2, fret: 2, interval: 2 }, // G string, A (2)
+    { string: 1, fret: 0, interval: 3 }, // B string, B (3)
+    { string: 1, fret: 1, interval: 4 }, // B string, C (4)
+    { string: 1, fret: 3, interval: 7 }, // B string, D (7)
+    { string: 0, fret: 0, interval: 7 }, // high E, E (7)
+    { string: 0, fret: 1, interval: 0 }, // high E, F (R)
+    { string: 0, fret: 3, interval: 2 }, // high E, G (2)
+  ],
+  A: [
+    // A shape major scale pattern (around open A position)
+    { string: 5, fret: 0, interval: 5 }, // E string, A (5)
+    { string: 4, fret: 0, interval: 0 }, // A string, A (R)
+    { string: 4, fret: 2, interval: 2 }, // A string, B (2)
+    { string: 4, fret: 4, interval: 4 }, // A string, C# (3)
+    { string: 3, fret: 0, interval: 5 }, // D string, D (5)
+    { string: 3, fret: 2, interval: 7 }, // D string, E (7)
+    { string: 2, fret: 1, interval: 0 }, // G string, G# (R)
+    { string: 2, fret: 2, interval: 2 }, // G string, A (2)
+    { string: 2, fret: 4, interval: 4 }, // G string, B (3)
+    { string: 1, fret: 0, interval: 7 }, // B string, B (7)
+    { string: 1, fret: 2, interval: 0 }, // B string, C# (R)
+    { string: 1, fret: 4, interval: 2 }, // B string, D# (2)
+    { string: 0, fret: 0, interval: 7 }, // high E, E (7)
+    { string: 0, fret: 2, interval: 0 }, // high E, F# (R)
+  ],
+  G: [
+    // G shape major scale pattern (around open G position)
+    { string: 5, fret: 3, interval: 0 }, // E string, G (R)
+    { string: 5, fret: 5, interval: 2 }, // E string, A (2)
+    { string: 4, fret: 2, interval: 4 }, // A string, B (3)
+    { string: 4, fret: 3, interval: 5 }, // A string, C (4)
+    { string: 4, fret: 5, interval: 7 }, // A string, D (5)
+    { string: 3, fret: 0, interval: 5 }, // D string, D (5)
+    { string: 3, fret: 2, interval: 7 }, // D string, E (7)
+    { string: 3, fret: 4, interval: 0 }, // D string, G (R)
+    { string: 2, fret: 0, interval: 0 }, // G string, G (R)
+    { string: 2, fret: 2, interval: 2 }, // G string, A (2)
+    { string: 1, fret: 0, interval: 4 }, // B string, B (3)
+    { string: 1, fret: 2, interval: 5 }, // B string, C (4)
+    { string: 0, fret: 3, interval: 0 }, // high E, G (R)
+    { string: 0, fret: 5, interval: 2 }, // high E, A (2)
+  ],
+  E: [
+    // E shape major scale pattern (around open E position)
+    { string: 5, fret: 0, interval: 0 }, // E string, E (R)
+    { string: 5, fret: 2, interval: 2 }, // E string, F# (2)
+    { string: 5, fret: 4, interval: 4 }, // E string, G# (3)
+    { string: 4, fret: 0, interval: 5 }, // A string, A (5)
+    { string: 4, fret: 2, interval: 7 }, // A string, B (7)
+    { string: 4, fret: 4, interval: 0 }, // A string, C# (R)
+    { string: 3, fret: 1, interval: 2 }, // D string, D# (2)
+    { string: 3, fret: 2, interval: 4 }, // D string, E (3)
+    { string: 3, fret: 4, interval: 5 }, // D string, F# (4)
+    { string: 2, fret: 1, interval: 0 }, // G string, G# (R)
+    { string: 2, fret: 2, interval: 2 }, // G string, A (2)
+    { string: 2, fret: 4, interval: 4 }, // G string, B (3)
+    { string: 1, fret: 0, interval: 7 }, // B string, B (7)
+    { string: 1, fret: 2, interval: 0 }, // B string, C# (R)
+    { string: 0, fret: 0, interval: 0 }, // high E, E (R)
+    { string: 0, fret: 2, interval: 2 }, // high E, F# (2)
+  ],
+  D: [
+    // D shape major scale pattern (around open D position)
+    { string: 4, fret: 0, interval: 5 }, // A string, A (5)
+    { string: 4, fret: 2, interval: 7 }, // A string, B (7)
+    { string: 3, fret: 0, interval: 0 }, // D string, D (R)
+    { string: 3, fret: 2, interval: 2 }, // D string, E (2)
+    { string: 3, fret: 4, interval: 4 }, // D string, F# (3)
+    { string: 2, fret: 0, interval: 5 }, // G string, G (5)
+    { string: 2, fret: 2, interval: 7 }, // G string, A (7)
+    { string: 2, fret: 4, interval: 0 }, // G string, B (R)
+    { string: 1, fret: 0, interval: 2 }, // B string, B (2)
+    { string: 1, fret: 2, interval: 4 }, // B string, C# (3)
+    { string: 1, fret: 3, interval: 5 }, // B string, D (4)
+    { string: 0, fret: 0, interval: 7 }, // high E, E (7)
+    { string: 0, fret: 2, interval: 0 }, // high E, F# (R)
+    { string: 0, fret: 4, interval: 2 }, // high E, G# (2)
+  ],
+};
+
+// Generate CAGED major scale pattern for a given root and shape
+export const generateCagedScaleFretboardMap = (
+  rootNote: string,
+  shapeId: CagedShapeTemplate["id"],
+  numFrets = 19,
+  tuning: number[] = STRING_TUNING
+): FretNote[] => {
+  const targetRootIndex = NOTES.indexOf(rootNote);
+  if (targetRootIndex === -1) return [];
+
+  const pattern = CAGED_SCALE_PATTERNS[shapeId];
+  if (!pattern) return [];
+
+  const baseRootIndex = NOTES.indexOf(CAGED_SHAPES.find((s) => s.id === shapeId)?.baseRoot || "C");
+  if (baseRootIndex === -1) return [];
+
+  const semitoneOffset = (targetRootIndex - baseRootIndex + 12) % 12;
+  const result: FretNote[] = [];
+  const majorScaleIntervals = new Set([0, 2, 4, 5, 7, 9, 11]); // Major scale intervals
+
+  pattern.forEach((pos) => {
+    const openStringNoteIndex = tuning[pos.string];
+    if (openStringNoteIndex === undefined) return;
+
+    const fret = pos.fret + semitoneOffset;
+    if (fret < 0 || fret > numFrets) return;
+
+    const currentNoteIndex = (openStringNoteIndex + fret) % 12;
+    const interval = (currentNoteIndex - targetRootIndex + 12) % 12;
+
+    // Only include notes that are in the major scale
+    if (!majorScaleIntervals.has(interval)) return;
+
+    result.push({
+      noteIndex: currentNoteIndex,
+      noteName: NOTES[currentNoteIndex],
+      interval,
+      intervalName: getIntervalName(interval),
+      fret,
+      string: pos.string,
+      isRoot: interval === 0,
+    });
+  });
+
+  return result;
+};
+
+// CAGED minor scale patterns - full natural minor scale positions for each CAGED shape
+const CAGED_MINOR_SCALE_PATTERNS: Record<CagedShapeTemplate["id"], { string: number; fret: number; interval: number }[]> = {
+  C: [
+    // C shape minor scale pattern (around C minor position)
+    { string: 5, fret: 3, interval: 5 }, // E string, G (5)
+    { string: 4, fret: 0, interval: 0 }, // A string, C (R)
+    { string: 4, fret: 1, interval: 1 }, // A string, C# (b2)
+    { string: 4, fret: 3, interval: 3 }, // A string, D# (b3)
+    { string: 3, fret: 0, interval: 5 }, // D string, D (5)
+    { string: 3, fret: 2, interval: 7 }, // D string, E (b7)
+    { string: 3, fret: 5, interval: 0 }, // D string, G (R)
+    { string: 2, fret: 0, interval: 0 }, // G string, G (R)
+    { string: 2, fret: 2, interval: 2 }, // G string, A (2)
+    { string: 2, fret: 3, interval: 3 }, // G string, Bb (b3)
+    { string: 2, fret: 5, interval: 5 }, // G string, C (4)
+    { string: 1, fret: 0, interval: 3 }, // B string, B (b3)
+    { string: 1, fret: 1, interval: 4 }, // B string, C (4)
+    { string: 1, fret: 3, interval: 7 }, // B string, D (b7)
+    { string: 0, fret: 0, interval: 7 }, // high E, E (b7)
+    { string: 0, fret: 1, interval: 0 }, // high E, F (R)
+    { string: 0, fret: 3, interval: 2 }, // high E, G (2)
+  ],
+  A: [
+    // A shape minor scale pattern (around A minor position)
+    { string: 5, fret: 0, interval: 5 }, // E string, A (5)
+    { string: 4, fret: 0, interval: 0 }, // A string, A (R)
+    { string: 4, fret: 1, interval: 1 }, // A string, Bb (b2)
+    { string: 4, fret: 3, interval: 3 }, // A string, C (b3)
+    { string: 3, fret: 0, interval: 5 }, // D string, D (5)
+    { string: 3, fret: 2, interval: 7 }, // D string, E (b7)
+    { string: 2, fret: 0, interval: 0 }, // G string, G (R)
+    { string: 2, fret: 2, interval: 2 }, // G string, A (2)
+    { string: 2, fret: 3, interval: 3 }, // G string, Bb (b3)
+    { string: 1, fret: 0, interval: 7 }, // B string, B (b7)
+    { string: 1, fret: 1, interval: 0 }, // B string, C (R)
+    { string: 1, fret: 3, interval: 2 }, // B string, D (2)
+    { string: 0, fret: 0, interval: 7 }, // high E, E (b7)
+    { string: 0, fret: 1, interval: 0 }, // high E, F (R)
+  ],
+  G: [
+    // G shape minor scale pattern (around G minor position)
+    { string: 5, fret: 3, interval: 0 }, // E string, G (R)
+    { string: 5, fret: 4, interval: 1 }, // E string, G# (b2)
+    { string: 5, fret: 6, interval: 3 }, // E string, Bb (b3)
+    { string: 4, fret: 2, interval: 3 }, // A string, B (b3)
+    { string: 4, fret: 3, interval: 4 }, // A string, C (4)
+    { string: 4, fret: 5, interval: 7 }, // A string, D (b7)
+    { string: 3, fret: 0, interval: 5 }, // D string, D (5)
+    { string: 3, fret: 2, interval: 7 }, // D string, E (b7)
+    { string: 3, fret: 5, interval: 0 }, // D string, G (R)
+    { string: 2, fret: 0, interval: 0 }, // G string, G (R)
+    { string: 2, fret: 1, interval: 1 }, // G string, G# (b2)
+    { string: 2, fret: 3, interval: 3 }, // G string, Bb (b3)
+    { string: 1, fret: 0, interval: 3 }, // B string, B (b3)
+    { string: 1, fret: 1, interval: 4 }, // B string, C (4)
+    { string: 0, fret: 3, interval: 0 }, // high E, G (R)
+    { string: 0, fret: 4, interval: 1 }, // high E, G# (b2)
+  ],
+  E: [
+    // E shape minor scale pattern (around E minor position)
+    { string: 5, fret: 0, interval: 0 }, // E string, E (R)
+    { string: 5, fret: 1, interval: 1 }, // E string, F (b2)
+    { string: 5, fret: 3, interval: 3 }, // E string, G (b3)
+    { string: 4, fret: 0, interval: 5 }, // A string, A (5)
+    { string: 4, fret: 2, interval: 7 }, // A string, B (b7)
+    { string: 4, fret: 3, interval: 0 }, // A string, C (R)
+    { string: 3, fret: 0, interval: 2 }, // D string, D (2)
+    { string: 3, fret: 2, interval: 4 }, // D string, E (b3)
+    { string: 3, fret: 3, interval: 5 }, // D string, F (4)
+    { string: 2, fret: 0, interval: 0 }, // G string, G (R)
+    { string: 2, fret: 2, interval: 2 }, // G string, A (2)
+    { string: 2, fret: 3, interval: 3 }, // G string, Bb (b3)
+    { string: 1, fret: 0, interval: 7 }, // B string, B (b7)
+    { string: 1, fret: 1, interval: 0 }, // B string, C (R)
+    { string: 0, fret: 0, interval: 0 }, // high E, E (R)
+    { string: 0, fret: 1, interval: 1 }, // high E, F (b2)
+  ],
+  D: [
+    // D shape minor scale pattern (around D minor position)
+    { string: 4, fret: 0, interval: 5 }, // A string, A (5)
+    { string: 4, fret: 1, interval: 6 }, // A string, Bb (b6)
+    { string: 4, fret: 3, interval: 0 }, // A string, C (R)
+    { string: 3, fret: 0, interval: 0 }, // D string, D (R)
+    { string: 3, fret: 1, interval: 1 }, // D string, D# (b2)
+    { string: 3, fret: 3, interval: 3 }, // D string, F (b3)
+    { string: 2, fret: 0, interval: 5 }, // G string, G (5)
+    { string: 2, fret: 2, interval: 7 }, // G string, A (b7)
+    { string: 2, fret: 3, interval: 0 }, // G string, Bb (R)
+    { string: 1, fret: 0, interval: 2 }, // B string, B (2)
+    { string: 1, fret: 1, interval: 3 }, // B string, C (b3)
+    { string: 1, fret: 3, interval: 5 }, // B string, D (4)
+    { string: 0, fret: 0, interval: 7 }, // high E, E (b7)
+    { string: 0, fret: 1, interval: 0 }, // high E, F (R)
+    { string: 0, fret: 3, interval: 2 }, // high E, G (2)
+  ],
+};
+
+// Generate CAGED minor triad chord tones for a given root and shape
+export const generateCagedMinorFretboardMap = (
+  rootNote: string,
+  shapeId: CagedShapeTemplate["id"],
+  tuning: number[] = STRING_TUNING
+): FretNote[] => {
+  const targetRootIndex = NOTES.indexOf(rootNote);
+  if (targetRootIndex === -1) return [];
+
+  const shape = CAGED_MINOR_SHAPES.find((s) => s.id === shapeId);
+  if (!shape) return [];
+
+  const baseRootIndex = NOTES.indexOf(shape.baseRoot);
+  if (baseRootIndex === -1) return [];
+
+  const semitoneOffset = (targetRootIndex - baseRootIndex + 12) % 12;
+  const result: FretNote[] = [];
+
+  shape.positions.forEach((pos) => {
+    const openStringNoteIndex = tuning[pos.string];
+    if (openStringNoteIndex === undefined) return;
+
+    const fret = pos.fret + semitoneOffset;
+    if (fret < 0 || fret > 24) return;
+
+    const currentNoteIndex = (openStringNoteIndex + fret) % 12;
+    const interval = (currentNoteIndex - targetRootIndex + 12) % 12;
+
+    // Only keep 1–b3–5 triad tones for the minor chord
+    if (![0, 3, 7].includes(interval)) return;
+
+    result.push({
+      noteIndex: currentNoteIndex,
+      noteName: NOTES[currentNoteIndex],
+      interval,
+      intervalName: getIntervalName(interval),
+      fret,
+      string: pos.string,
+      isRoot: interval === 0,
+    });
+  });
+
+  return result;
+};
+
+// Generate CAGED minor scale pattern for a given root and shape
+export const generateCagedMinorScaleFretboardMap = (
+  rootNote: string,
+  shapeId: CagedShapeTemplate["id"],
+  numFrets = 19,
+  tuning: number[] = STRING_TUNING
+): FretNote[] => {
+  const targetRootIndex = NOTES.indexOf(rootNote);
+  if (targetRootIndex === -1) return [];
+
+  const pattern = CAGED_MINOR_SCALE_PATTERNS[shapeId];
+  if (!pattern) return [];
+
+  const baseRootIndex = NOTES.indexOf(CAGED_MINOR_SHAPES.find((s) => s.id === shapeId)?.baseRoot || "C");
+  if (baseRootIndex === -1) return [];
+
+  const semitoneOffset = (targetRootIndex - baseRootIndex + 12) % 12;
+  const result: FretNote[] = [];
+  const minorScaleIntervals = new Set([0, 2, 3, 5, 7, 8, 10]); // Natural minor scale intervals
+
+  pattern.forEach((pos) => {
+    const openStringNoteIndex = tuning[pos.string];
+    if (openStringNoteIndex === undefined) return;
+
+    const fret = pos.fret + semitoneOffset;
+    if (fret < 0 || fret > numFrets) return;
+
+    const currentNoteIndex = (openStringNoteIndex + fret) % 12;
+    const interval = (currentNoteIndex - targetRootIndex + 12) % 12;
+
+    // Only include notes that are in the natural minor scale
+    if (!minorScaleIntervals.has(interval)) return;
 
     result.push({
       noteIndex: currentNoteIndex,

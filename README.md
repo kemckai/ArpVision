@@ -18,12 +18,14 @@
 - **Extended Chords** - 9ths, 11ths, 13ths, Add9, 6/9, and altered dominants (b9, #9, b5, #5, b13)
 
 ### Scales & Modes
+- **39 Comprehensive Scales** - Complete collection of scales from classical to exotic
 - **Modes** - Ionian, Dorian, Phrygian, Lydian, Mixolydian, Aeolian, Locrian
 - **Pentatonics** - Major Pentatonic, Minor Pentatonic, Blues Scale
 - **Minor Scales** - Harmonic Minor, Melodic Minor, Dorian b2, Lydian Augmented, Lydian Dominant, Mixolydian b6, Locrian #2, Altered
 - **Symmetric Scales** - Whole Tone, Diminished (Half-Whole), Diminished (Whole-Half)
-- **Exotic & World Scales** - Hungarian Minor, Neapolitan Minor/Major, Double Harmonic, Persian, Enigmatic, Hirajoshi, In Sen, Iwato, Yo
+- **Exotic & World Scales** - Hungarian Minor, Neapolitan Minor/Major, Double Harmonic, Persian, Enigmatic, Hirajoshi, In Sen, Iwato, Yo, Scottish Pentatonic
 - **Other Scales** - Chromatic, Bebop scales, Augmented, Prometheus, Tritone
+- **Scale History & Context** - Each scale includes historical background, cultural origins, and musical usage information in the dropdown
 
 ### CAGED System
 - **Major CAGED Shapes** - All five major triad shapes (C, A, G, E, D) transposable to any root
@@ -46,6 +48,7 @@
 - **Dynamic Titles** - Fretboard title updates based on selection (e.g., "A Harmonic Minor", "D Major – C Shape")
 - **Theory Panel** - Shows all notes in the current chord/scale with interval names
 - **Scrollable Dropdowns** - Easy navigation through extensive scale lists
+- **Scale Descriptions** - Historical context and usage information for every scale, including cultural origins, famous examples, and musical characteristics
 - **Responsive Design** - Works on desktop and tablet devices
 
 ## 🚀 Getting Started
@@ -93,9 +96,10 @@ npm start
 
 ### Using Scales
 
-1. **Select Scale** - Use the "Scale" dropdown to choose from 40+ scales
-2. **Pick Root Note** - Select your desired root
-3. **Visualize** - The fretboard shows all scale tones with color-coded intervals
+1. **Select Scale** - Use the "Scale" dropdown to choose from 39 scales
+2. **Read Description** - Each scale shows historical context, cultural origins, and usage information directly in the dropdown
+3. **Pick Root Note** - Select your desired root
+4. **Visualize** - The fretboard shows all scale tones with color-coded intervals
 
 ### CAGED Shapes
 
