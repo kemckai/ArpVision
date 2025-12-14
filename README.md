@@ -90,6 +90,34 @@ npm run build
 npm start
 ```
 
+### Deploy to Vercel (Free)
+
+ArpVision is configured for easy deployment on Vercel's free tier:
+
+1. **Push your code to GitHub**
+   ```bash
+   git add .
+   git commit -m "Configure for Vercel deployment"
+   git push origin main
+   ```
+
+2. **Import project in Vercel**
+   - Go to [vercel.com](https://vercel.com) and sign in with GitHub
+   - Click "Add New Project"
+   - Import your GitHub repository
+   - Vercel will auto-detect the settings from `vercel.json`
+
+3. **Deploy**
+   - Click "Deploy"
+   - Your app will be live at `your-project.vercel.app`
+
+The configuration (`vercel.json`) includes:
+- Optimized client-only build for faster deployments
+- Proper SPA routing (all routes serve `index.html`)
+- Static asset caching headers for better performance
+
+**Note**: The Vercel deployment uses the `vercel-build` script which only builds the client (faster build times). For full-stack deployments with the Express server, use the standard `npm run build` command.
+
 ## 📖 Usage Guide
 
 ### Basic Navigation

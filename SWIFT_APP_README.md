@@ -109,3 +109,4 @@ To complete the SwiftUI implementation:
 
 **Note**: This is a foundation for a native SwiftUI app. The full implementation would require porting all features from the web app.
 
+

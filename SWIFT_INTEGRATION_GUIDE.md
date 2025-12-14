@@ -197,3 +197,4 @@ Choose based on your needs:
 
 **Ready to integrate?** Follow Option 1 for the easiest path, or Option 2 if you want to fully replace Capacitor.
 
+

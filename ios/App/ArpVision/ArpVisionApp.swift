@@ -1,8 +1,8 @@
 //
 //  ArpVisionApp.swift
-//  ArpVision
+//  ArpVision Native
 //
-//  Main SwiftUI app entry point
+//  Main SwiftUI app entry point for native iOS app
 //
 
 import SwiftUI
@@ -15,4 +15,5 @@ struct ArpVisionApp: App {
         }
     }
 }
+
 
