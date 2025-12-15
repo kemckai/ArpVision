@@ -1,0 +1,35 @@
+# iOS build artifacts
+ios/
+*.xcworkspace
+*.xcodeproj
+DerivedData
+
+# Swift playgrounds
+*.playground
+
+# Development files
+.replit
+*.md
+!README.md
+
+# Build artifacts (will be generated)
+dist/index.cjs
+
+# Test files
+**/*.test.ts
+**/*.test.tsx
+**/*.spec.ts
+**/*.spec.tsx
+
+# Documentation
+SWIFT_*.md
+IOS_*.md
+
+# Scripts (not needed for client build)
+script/
+
+# Server code (not needed for static deployment)
+server/
+
+# Capacitor config (not needed for web)
+capacitor.config.ts
