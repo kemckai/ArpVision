@@ -69,8 +69,8 @@
 
 1. **Clone the repository**
    ```bash
-   git clone <repository-url>
-   cd Guitar_Arpeggios-main
+   git clone https://github.com/kemckai/ArpVision.git
+   cd ArpVision
    ```
 
 2. **Install dependencies**
