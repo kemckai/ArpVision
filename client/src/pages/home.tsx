@@ -1058,7 +1058,7 @@ export default function Home() {
                     <TabsTrigger value="extended" className="text-xs px-2.5 py-1.5">Ext.</TabsTrigger>
                     <TabsTrigger value="modes" className="text-xs px-2.5 py-1.5">Modes</TabsTrigger>
                     <TabsTrigger value="pents" className="text-xs px-2.5 py-1.5">Pents</TabsTrigger>
-                    <TabsTrigger value="caged" className="text-xs px-2.5 py-1.5">CAGED</TabsTrigger>
+                    <TabsTrigger value="caged" className="text-xs px-2.5 py-1.5">Caged</TabsTrigger>
                     <TabsTrigger value="diads" className="text-xs px-2.5 py-1.5">Diads</TabsTrigger>
                     <TabsTrigger value="sweep" className="text-xs px-2.5 py-1.5">Sweep</TabsTrigger>
                     <TabsTrigger value="tap" className="text-xs px-2.5 py-1.5">Tap</TabsTrigger>
@@ -1465,7 +1465,7 @@ export default function Home() {
                       : currentDoubleStop
                       ? "Notes in Diad"
                       : currentCagedShape
-                      ? "Notes in CAGED Shape"
+                      ? "Notes in Caged Shape"
                       : currentScale || currentPent || currentMode
                       ? "Notes in Scale"
                       : "Notes in Chord"}
