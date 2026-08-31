@@ -21,6 +21,9 @@ export const ARPEGGIO_TYPES = [
   { id: "minMaj7", name: "Minor Major 7", intervals: [0, 3, 7, 11] },
   { id: "minAdd9", name: "Minor Add 9", intervals: [0, 3, 7, 2] },
   { id: "dom9", name: "Dominant 9", intervals: [0, 4, 7, 10, 2] },
+  { id: "maj13", name: "Major 13", intervals: [0, 4, 7, 11, 2, 9] },
+  { id: "dom13", name: "Dominant 13", intervals: [0, 4, 7, 10, 2, 9] },
+  { id: "dom13b9", name: "Dom13♭9", intervals: [0, 4, 7, 10, 1, 9] },
   // Additional common extended / altered types
   { id: "majAdd9", name: "Major Add 9", intervals: [0, 4, 7, 2] },
   { id: "majAdd11", name: "Major Add 11", intervals: [0, 4, 7, 5] },
@@ -539,6 +542,166 @@ export const CAGED_MINOR_SHAPES: CagedShapeTemplate[] = [
   },
 ];
 
+export type DoubleStopPair = [
+  { string: number; fret: number },
+  { string: number; fret: number },
+];
+
+export type DoubleStopPattern = {
+  id: string;
+  name: string;
+  description: string;
+  category: "thirds" | "sixths" | "fourths" | "fifths" | "octaves";
+  stringSet: string;
+  intervalPair: [number, number];
+  baseRoot: string;
+  pairs: DoubleStopPair[];
+};
+
+export const DOUBLE_STOP_PATTERNS: DoubleStopPattern[] = [
+  {
+    id: "maj-thirds-gb",
+    name: "Major 3rds",
+    description: "Parallel major 3rds on the G & B strings. Essential for country, rock, and melodic fills.",
+    category: "thirds",
+    stringSet: "G & B",
+    intervalPair: [0, 4],
+    baseRoot: "G",
+    pairs: [
+      [{ string: 2, fret: 0 }, { string: 1, fret: 0 }],
+      [{ string: 2, fret: 2 }, { string: 1, fret: 2 }],
+      [{ string: 2, fret: 4 }, { string: 1, fret: 4 }],
+      [{ string: 2, fret: 5 }, { string: 1, fret: 5 }],
+      [{ string: 2, fret: 7 }, { string: 1, fret: 7 }],
+      [{ string: 2, fret: 9 }, { string: 1, fret: 9 }],
+      [{ string: 2, fret: 12 }, { string: 1, fret: 12 }],
+    ],
+  },
+  {
+    id: "min-thirds-gb",
+    name: "Minor 3rds",
+    description: "Parallel minor 3rds on the G & B strings. Darker harmony for blues and minor-key leads.",
+    category: "thirds",
+    stringSet: "G & B",
+    intervalPair: [0, 3],
+    baseRoot: "G",
+    pairs: [
+      [{ string: 2, fret: 0 }, { string: 1, fret: 1 }],
+      [{ string: 2, fret: 2 }, { string: 1, fret: 3 }],
+      [{ string: 2, fret: 3 }, { string: 1, fret: 4 }],
+      [{ string: 2, fret: 5 }, { string: 1, fret: 6 }],
+      [{ string: 2, fret: 7 }, { string: 1, fret: 8 }],
+      [{ string: 2, fret: 8 }, { string: 1, fret: 9 }],
+      [{ string: 2, fret: 10 }, { string: 1, fret: 11 }],
+    ],
+  },
+  {
+    id: "maj-thirds-be",
+    name: "Major 3rds",
+    description: "Major 3rd harmony on the B & high E strings. Classic Chuck Berry and rockabilly voicings.",
+    category: "thirds",
+    stringSet: "B & E",
+    intervalPair: [0, 4],
+    baseRoot: "E",
+    pairs: [
+      [{ string: 0, fret: 0 }, { string: 1, fret: 1 }],
+      [{ string: 0, fret: 2 }, { string: 1, fret: 3 }],
+      [{ string: 0, fret: 4 }, { string: 1, fret: 5 }],
+      [{ string: 0, fret: 5 }, { string: 1, fret: 6 }],
+      [{ string: 0, fret: 7 }, { string: 1, fret: 8 }],
+      [{ string: 0, fret: 9 }, { string: 1, fret: 10 }],
+      [{ string: 0, fret: 12 }, { string: 1, fret: 13 }],
+    ],
+  },
+  {
+    id: "maj-sixths-eg",
+    name: "Major 6ths",
+    description: "Wide major 6th intervals across the E & G strings. Signature country and Western swing harmony.",
+    category: "sixths",
+    stringSet: "E & G",
+    intervalPair: [0, 9],
+    baseRoot: "G",
+    pairs: [
+      [{ string: 0, fret: 3 }, { string: 2, fret: 0 }],
+      [{ string: 0, fret: 5 }, { string: 2, fret: 2 }],
+      [{ string: 0, fret: 7 }, { string: 2, fret: 4 }],
+      [{ string: 0, fret: 8 }, { string: 2, fret: 5 }],
+      [{ string: 0, fret: 10 }, { string: 2, fret: 7 }],
+      [{ string: 0, fret: 12 }, { string: 2, fret: 9 }],
+    ],
+  },
+  {
+    id: "min-sixths-eg",
+    name: "Minor 6ths",
+    description: "Minor 6th harmony on the E & G strings. Smoky, soulful color for ballads and blues.",
+    category: "sixths",
+    stringSet: "E & G",
+    intervalPair: [0, 8],
+    baseRoot: "G",
+    pairs: [
+      [{ string: 0, fret: 3 }, { string: 2, fret: 1 }],
+      [{ string: 0, fret: 5 }, { string: 2, fret: 3 }],
+      [{ string: 0, fret: 7 }, { string: 2, fret: 5 }],
+      [{ string: 0, fret: 8 }, { string: 2, fret: 6 }],
+      [{ string: 0, fret: 10 }, { string: 2, fret: 8 }],
+      [{ string: 0, fret: 12 }, { string: 2, fret: 10 }],
+    ],
+  },
+  {
+    id: "fourths-dg",
+    name: "Perfect 4ths",
+    description: "Stacked 4ths on the D & G strings. Modern jazz and fusion voicings with an open, suspended feel.",
+    category: "fourths",
+    stringSet: "D & G",
+    intervalPair: [0, 5],
+    baseRoot: "D",
+    pairs: [
+      [{ string: 3, fret: 0 }, { string: 2, fret: 0 }],
+      [{ string: 3, fret: 2 }, { string: 2, fret: 2 }],
+      [{ string: 3, fret: 4 }, { string: 2, fret: 4 }],
+      [{ string: 3, fret: 5 }, { string: 2, fret: 5 }],
+      [{ string: 3, fret: 7 }, { string: 2, fret: 7 }],
+      [{ string: 3, fret: 9 }, { string: 2, fret: 9 }],
+      [{ string: 3, fret: 12 }, { string: 2, fret: 12 }],
+    ],
+  },
+  {
+    id: "fifths-ad",
+    name: "Perfect 5ths",
+    description: "Power-chord style 5ths on the A & D strings. Punchy rhythm and riff foundation.",
+    category: "fifths",
+    stringSet: "A & D",
+    intervalPair: [0, 7],
+    baseRoot: "A",
+    pairs: [
+      [{ string: 4, fret: 0 }, { string: 3, fret: 2 }],
+      [{ string: 4, fret: 2 }, { string: 3, fret: 4 }],
+      [{ string: 4, fret: 4 }, { string: 3, fret: 6 }],
+      [{ string: 4, fret: 5 }, { string: 3, fret: 7 }],
+      [{ string: 4, fret: 7 }, { string: 3, fret: 9 }],
+      [{ string: 4, fret: 9 }, { string: 3, fret: 11 }],
+      [{ string: 4, fret: 12 }, { string: 3, fret: 14 }],
+    ],
+  },
+  {
+    id: "octaves-ad",
+    name: "Octaves",
+    description: "Octave shapes on the A & D strings. Wes Montgomery and jazz comping staple.",
+    category: "octaves",
+    stringSet: "A & D",
+    intervalPair: [0, 0],
+    baseRoot: "A",
+    pairs: [
+      [{ string: 4, fret: 0 }, { string: 3, fret: 7 }],
+      [{ string: 4, fret: 2 }, { string: 3, fret: 9 }],
+      [{ string: 4, fret: 4 }, { string: 3, fret: 11 }],
+      [{ string: 4, fret: 5 }, { string: 3, fret: 12 }],
+      [{ string: 4, fret: 7 }, { string: 3, fret: 14 }],
+      [{ string: 4, fret: 9 }, { string: 3, fret: 16 }],
+    ],
+  },
+];
+
 export type Lick = {
   id: string;
   artist: string;
@@ -561,6 +724,279 @@ export const FAMOUS_LICKS: Lick[] = [
       { string: 0, fret: 13 }, { string: 0, fret: 10 }, { string: 1, fret: 10 }, 
       { string: 2, fret: 10 }, { string: 0, fret: 12 }, { string: 0, fret: 9 },
       { string: 1, fret: 10 }, { string: 2, fret: 9 }
+    ]
+  },
+  {
+    id: "rhoads-crazy-train",
+    artist: "Randy Rhoads",
+    name: "Crazy Train Solo Run",
+    description: "Harmonic minor ascending arpeggio from the Crazy Train solo. String-skipping neo-classical fire in E.",
+    root: "E",
+    type: "min",
+    positions: [
+      { string: 0, fret: 12 }, { string: 1, fret: 12 }, { string: 2, fret: 13 },
+      { string: 3, fret: 14 }, { string: 2, fret: 11 }, { string: 1, fret: 10 },
+      { string: 0, fret: 12 }, { string: 0, fret: 15 }
+    ]
+  },
+  {
+    id: "rhoads-goodbye",
+    artist: "Randy Rhoads",
+    name: "Goodbye to Romance",
+    description: "Sweeping F# minor triad cascade from Goodbye to Romance. Pure classical guitar influence on electric.",
+    root: "F#",
+    type: "min",
+    positions: [
+      { string: 0, fret: 14 }, { string: 1, fret: 14 }, { string: 2, fret: 11 },
+      { string: 3, fret: 11 }, { string: 2, fret: 9 }, { string: 1, fret: 9 },
+      { string: 0, fret: 11 }, { string: 0, fret: 14 }
+    ]
+  },
+  {
+    id: "rhoads-dee",
+    artist: "Randy Rhoads",
+    name: "Dee (Classical Etude)",
+    description: "The arpeggiated D major figure from Dee — Randy's unaccompanied classical piece. Delicate and precise.",
+    root: "D",
+    type: "maj",
+    positions: [
+      { string: 0, fret: 10 }, { string: 1, fret: 10 }, { string: 2, fret: 11 },
+      { string: 3, fret: 12 }, { string: 2, fret: 14 }, { string: 1, fret: 12 },
+      { string: 0, fret: 10 }, { string: 0, fret: 7 }
+    ]
+  },
+  {
+    id: "rhoads-revelation",
+    artist: "Randy Rhoads",
+    name: "Revelation (Mother Earth)",
+    description: "B minor neo-classical arpeggio from Revelation. Ascending triad sweep with Randy's signature clarity.",
+    root: "B",
+    type: "min",
+    positions: [
+      { string: 0, fret: 7 }, { string: 1, fret: 7 }, { string: 2, fret: 4 },
+      { string: 3, fret: 4 }, { string: 2, fret: 6 }, { string: 1, fret: 6 },
+      { string: 0, fret: 7 }, { string: 0, fret: 10 }
+    ]
+  },
+  {
+    id: "rhoads-flying",
+    artist: "Randy Rhoads",
+    name: "Flying High Again",
+    description: "Upper-register A minor arpeggio burst from Flying High Again. Fast alternate-picked classical sequence.",
+    root: "A",
+    type: "min",
+    positions: [
+      { string: 0, fret: 17 }, { string: 0, fret: 15 }, { string: 1, fret: 17 },
+      { string: 2, fret: 14 }, { string: 2, fret: 13 }, { string: 1, fret: 15 },
+      { string: 0, fret: 17 }, { string: 0, fret: 20 }
+    ]
+  },
+  {
+    id: "rhoads-suicide",
+    artist: "Randy Rhoads",
+    name: "Suicide Solution Intro",
+    description: "D harmonic minor descending figure from Suicide Solution. Dark neo-classical phrasing with wide intervals.",
+    root: "D",
+    type: "min",
+    positions: [
+      { string: 0, fret: 10 }, { string: 0, fret: 8 }, { string: 1, fret: 10 },
+      { string: 2, fret: 9 }, { string: 3, fret: 10 }, { string: 2, fret: 7 },
+      { string: 1, fret: 7 }, { string: 0, fret: 7 }
+    ]
+  },
+  {
+    id: "rhoads-dim",
+    artist: "Randy Rhoads",
+    name: "Diminished Cascade",
+    description: "Randy's favorite diminished 7th sweep pattern — used across Crowley, Crazy Train, and live solos.",
+    root: "A",
+    type: "dim7",
+    positions: [
+      { string: 0, fret: 17 }, { string: 0, fret: 14 }, { string: 1, fret: 16 },
+      { string: 2, fret: 17 }, { string: 2, fret: 14 }, { string: 3, fret: 16 },
+      { string: 3, fret: 13 }, { string: 2, fret: 14 }
+    ]
+  },
+  {
+    id: "prince-purple-rain",
+    artist: "Prince",
+    name: "Purple Rain Solo",
+    description: "The soulful Bb major arpeggio from the Purple Rain outro. Emotional bends and ringing open-voiced triads.",
+    root: "A#",
+    type: "maj",
+    positions: [
+      { string: 0, fret: 6 }, { string: 1, fret: 6 }, { string: 2, fret: 7 },
+      { string: 3, fret: 8 }, { string: 2, fret: 10 }, { string: 1, fret: 11 },
+      { string: 0, fret: 13 }, { string: 0, fret: 15 }
+    ]
+  },
+  {
+    id: "prince-kiss",
+    artist: "Prince",
+    name: "Kiss",
+    description: "The stripped-down funk figure from Kiss. Staccato A7 hits — minimal notes, maximum groove.",
+    root: "A",
+    type: "dom7",
+    positions: [
+      { string: 0, fret: 5 }, { string: 1, fret: 5 }, { string: 2, fret: 5 },
+      { string: 3, fret: 7 }, { string: 2, fret: 5 }, { string: 1, fret: 5 },
+      { string: 0, fret: 8 }, { string: 0, fret: 5 }
+    ]
+  },
+  {
+    id: "prince-go-crazy",
+    artist: "Prince",
+    name: "Let's Go Crazy",
+    description: "The ascending B major arpeggio from the Let's Go Crazy intro break. Church on Sunday, party all night.",
+    root: "B",
+    type: "maj",
+    positions: [
+      { string: 0, fret: 7 }, { string: 1, fret: 7 }, { string: 2, fret: 4 },
+      { string: 3, fret: 4 }, { string: 4, fret: 2 }, { string: 3, fret: 4 },
+      { string: 2, fret: 4 }, { string: 0, fret: 7 }
+    ]
+  },
+  {
+    id: "prince-doves-cry",
+    artist: "Prince",
+    name: "When Doves Cry",
+    description: "Crystalline A minor phrase from the When Doves Cry solo. Sparse, icy, and impossibly funky.",
+    root: "A",
+    type: "min",
+    positions: [
+      { string: 0, fret: 5 }, { string: 0, fret: 8 }, { string: 1, fret: 8 },
+      { string: 2, fret: 7 }, { string: 2, fret: 5 }, { string: 1, fret: 5 },
+      { string: 0, fret: 5 }, { string: 0, fret: 12 }
+    ]
+  },
+  {
+    id: "prince-cream",
+    artist: "Prince",
+    name: "Cream",
+    description: "Blues-funk A7 lick from Cream. Dirty bends and stabbing rhythm hits in the pocket.",
+    root: "A",
+    type: "dom7",
+    positions: [
+      { string: 0, fret: 5 }, { string: 1, fret: 8 }, { string: 0, fret: 5 },
+      { string: 2, fret: 7 }, { string: 2, fret: 5 }, { string: 1, fret: 8 },
+      { string: 0, fret: 10 }, { string: 0, fret: 8 }
+    ]
+  },
+  {
+    id: "prince-raspberry",
+    artist: "Prince",
+    name: "Raspberry Beret",
+    description: "The jangly G major riff from Raspberry Beret. Pop-funk arpeggio with a Beatlesque charm.",
+    root: "G",
+    type: "maj",
+    positions: [
+      { string: 0, fret: 3 }, { string: 1, fret: 3 }, { string: 2, fret: 0 },
+      { string: 2, fret: 2 }, { string: 1, fret: 3 }, { string: 0, fret: 3 },
+      { string: 0, fret: 5 }, { string: 0, fret: 7 }
+    ]
+  },
+  {
+    id: "prince-beautiful",
+    artist: "Prince",
+    name: "The Beautiful Ones",
+    description: "Heart-wrenching Bb major phrase from The Beautiful Ones. Slow, vocal-like bends in the upper register.",
+    root: "A#",
+    type: "maj7",
+    positions: [
+      { string: 0, fret: 11 }, { string: 1, fret: 11 }, { string: 2, fret: 10 },
+      { string: 3, fret: 8 }, { string: 2, fret: 10 }, { string: 1, fret: 8 },
+      { string: 0, fret: 10 }, { string: 0, fret: 13 }
+    ]
+  },
+  {
+    id: "allman-layla",
+    artist: "Duane Allman",
+    name: "Layla Solo",
+    description: "The heart-wrenching D minor phrase from the Layla outro. Lyrical bends and crying sustain — Duane and Clapton trading souls.",
+    root: "D",
+    type: "min",
+    positions: [
+      { string: 0, fret: 10 }, { string: 0, fret: 13 }, { string: 1, fret: 13 },
+      { string: 2, fret: 12 }, { string: 2, fret: 10 }, { string: 1, fret: 10 },
+      { string: 0, fret: 10 }, { string: 0, fret: 15 }
+    ]
+  },
+  {
+    id: "allman-blue-sky",
+    artist: "Duane Allman",
+    name: "Blue Sky",
+    description: "Sun-drenched D major pentatonic from Blue Sky. Pure Southern joy — singing, open, and effortlessly melodic.",
+    root: "D",
+    type: "maj",
+    positions: [
+      { string: 0, fret: 10 }, { string: 0, fret: 12 }, { string: 0, fret: 15 },
+      { string: 1, fret: 12 }, { string: 2, fret: 11 }, { string: 2, fret: 14 },
+      { string: 1, fret: 15 }, { string: 0, fret: 17 }
+    ]
+  },
+  {
+    id: "allman-statesboro",
+    artist: "Duane Allman",
+    name: "Statesboro Blues",
+    description: "Duane's slide-inspired E blues figure from Statesboro Blues. Raw Delta fire channeled through Marshall stacks.",
+    root: "E",
+    type: "min",
+    positions: [
+      { string: 0, fret: 12 }, { string: 0, fret: 15 }, { string: 1, fret: 15 },
+      { string: 2, fret: 14 }, { string: 2, fret: 12 }, { string: 1, fret: 12 },
+      { string: 0, fret: 12 }, { string: 0, fret: 10 }
+    ]
+  },
+  {
+    id: "allman-one-way",
+    artist: "Duane Allman",
+    name: "One Way Out",
+    description: "The stabbing A minor blues riff from One Way Out. Tight funk pocket with Duane's unmistakable tone.",
+    root: "A",
+    type: "min",
+    positions: [
+      { string: 0, fret: 5 }, { string: 0, fret: 8 }, { string: 1, fret: 5 },
+      { string: 2, fret: 7 }, { string: 2, fret: 5 }, { string: 1, fret: 8 },
+      { string: 0, fret: 10 }, { string: 0, fret: 8 }
+    ]
+  },
+  {
+    id: "allman-whipping",
+    artist: "Duane Allman",
+    name: "Whipping Post",
+    description: "The ascending A minor run from Whipping Post. Urgent, modal, and building toward catharsis.",
+    root: "A",
+    type: "min",
+    positions: [
+      { string: 0, fret: 8 }, { string: 0, fret: 10 }, { string: 1, fret: 10 },
+      { string: 2, fret: 9 }, { string: 2, fret: 7 }, { string: 1, fret: 8 },
+      { string: 0, fret: 8 }, { string: 0, fret: 12 }
+    ]
+  },
+  {
+    id: "allman-wonderin",
+    artist: "Duane Allman",
+    name: "Don't Keep Me Wonderin'",
+    description: "Bright A major pentatonic lick from Don't Keep Me Wonderin'. Bouncy, soulful, and rhythmically alive.",
+    root: "A",
+    type: "maj",
+    positions: [
+      { string: 0, fret: 5 }, { string: 0, fret: 7 }, { string: 0, fret: 9 },
+      { string: 1, fret: 10 }, { string: 2, fret: 9 }, { string: 1, fret: 9 },
+      { string: 0, fret: 5 }, { string: 0, fret: 12 }
+    ]
+  },
+  {
+    id: "allman-stormy",
+    artist: "Duane Allman",
+    name: "Stormy Monday",
+    description: "Slow blues in A# from the Fillmore East Stormy Monday. Vocal bends and behind-the-bridge sweetness.",
+    root: "A#",
+    type: "dom7",
+    positions: [
+      { string: 0, fret: 6 }, { string: 0, fret: 9 }, { string: 1, fret: 8 },
+      { string: 2, fret: 8 }, { string: 2, fret: 6 }, { string: 1, fret: 6 },
+      { string: 0, fret: 6 }, { string: 0, fret: 11 }
     ]
   },
   {
@@ -703,6 +1139,20 @@ export const getIntervalName = (interval: number) => {
   }
 };
 
+export const getChordIntervalLabel = (
+  interval: number,
+  chordIntervals: number[]
+): string => {
+  if (interval === 0) return "R";
+  const has9 = chordIntervals.includes(2);
+  const has11 = chordIntervals.includes(5);
+  const has13 = chordIntervals.includes(9);
+  if (interval === 2 && has9) return "9";
+  if (interval === 5 && has11) return "11";
+  if (interval === 9 && has13) return "13";
+  return getIntervalName(interval);
+};
+
 // Convert sharp note names to flat note names using flat symbol (♭)
 export const formatNoteNameWithFlat = (noteName: string): string => {
   const sharpToFlat: Record<string, string> = {
@@ -713,6 +1163,55 @@ export const formatNoteNameWithFlat = (noteName: string): string => {
     "A#": "B♭",
   };
   return sharpToFlat[noteName] || noteName;
+};
+
+export type ChordInversion = 0 | 1 | 2;
+
+export const INVERSION_LABELS: Record<ChordInversion, string> = {
+  0: "Root Position",
+  1: "1st Inversion",
+  2: "2nd Inversion",
+};
+
+export const getMaxInversion = (intervals: number[]): ChordInversion =>
+  Math.min(2, Math.max(0, intervals.length - 1)) as ChordInversion;
+
+export const getInversionBassInterval = (
+  intervals: number[],
+  inversion: ChordInversion
+): number => {
+  const sorted = [...intervals].sort((a, b) => a - b);
+  const clamped = Math.min(inversion, sorted.length - 1);
+  return sorted[clamped];
+};
+
+export const getRotatedChordIntervals = (
+  intervals: number[],
+  inversion: ChordInversion
+): number[] => {
+  const sorted = [...intervals].sort((a, b) => a - b);
+  const clamped = Math.min(inversion, sorted.length - 1);
+  return [...sorted.slice(clamped), ...sorted.slice(0, clamped)];
+};
+
+const filterNotesForInversion = (
+  notes: FretNote[],
+  bassInterval: number,
+  tuning: number[]
+): FretNote[] => {
+  const pitch = (note: FretNote) => tuning[note.string] * 100 + note.fret;
+
+  return notes.filter((note) => {
+    if (note.interval === bassInterval) return true;
+
+    const notePitch = pitch(note);
+    return notes.some(
+      (other) =>
+        other.interval === bassInterval &&
+        other.string > note.string &&
+        pitch(other) <= notePitch
+    );
+  });
 };
 
 export type FretNote = {
@@ -1242,7 +1741,89 @@ export const generateLickFretboardMap = (
   return result;
 };
 
-export const generateFretboardMap = (rootNote: string, typeId: string, numFrets = 15, tuning: number[] = STRING_TUNING) => {
+const transposeDoubleStopPairs = (
+  pattern: DoubleStopPattern,
+  rootNote: string,
+  numFrets = 19
+): { string: number; fret: number }[][] => {
+  const targetRootIndex = NOTES.indexOf(rootNote);
+  const baseRootIndex = NOTES.indexOf(pattern.baseRoot);
+  if (targetRootIndex === -1 || baseRootIndex === -1) return [];
+
+  const semitoneOffset = (targetRootIndex - baseRootIndex + 12) % 12;
+
+  return pattern.pairs
+    .map((pair) =>
+      pair
+        .map((pos) => {
+          let fret = pos.fret + semitoneOffset;
+          while (fret < 1) fret += 12;
+          return { string: pos.string, fret };
+        })
+        .filter((pos) => pos.fret >= 1 && pos.fret <= numFrets)
+    )
+    .filter((pair) => pair.length === 2);
+};
+
+export const getDoubleStopPairGroups = (
+  rootNote: string,
+  patternId: string,
+  numFrets = 19
+): { string: number; fret: number }[][] => {
+  const pattern = DOUBLE_STOP_PATTERNS.find((p) => p.id === patternId);
+  if (!pattern) return [];
+  return transposeDoubleStopPairs(pattern, rootNote, numFrets);
+};
+
+export const generateDoubleStopFretboardMap = (
+  rootNote: string,
+  patternId: string,
+  tuning: number[] = STRING_TUNING,
+  numFrets = 19
+): FretNote[] => {
+  const pairGroups = getDoubleStopPairGroups(rootNote, patternId, numFrets);
+  if (!pairGroups.length) return [];
+
+  const rootIndex = NOTES.indexOf(rootNote);
+  if (rootIndex === -1) return [];
+
+  const seen = new Set<string>();
+  const result: FretNote[] = [];
+
+  pairGroups.forEach((pair) => {
+    pair.forEach((pos) => {
+      const key = `${pos.string}-${pos.fret}`;
+      if (seen.has(key)) return;
+      seen.add(key);
+
+      const openStringNoteIndex = tuning[pos.string];
+      if (openStringNoteIndex === undefined) return;
+
+      const currentNoteIndex = (openStringNoteIndex + pos.fret) % 12;
+      const interval = (currentNoteIndex - rootIndex + 12) % 12;
+
+      result.push({
+        noteIndex: currentNoteIndex,
+        noteName: NOTES[currentNoteIndex],
+        interval,
+        intervalName: getIntervalName(interval),
+        fret: pos.fret,
+        string: pos.string,
+        isRoot: interval === 0,
+      });
+    });
+  });
+
+  return result;
+};
+
+export const generateFretboardMap = (
+  rootNote: string,
+  typeId: string,
+  numFrets = 15,
+  tuning: number[] = STRING_TUNING,
+  inversion: ChordInversion = 0
+) => {
   // Validate inputs
   if (!rootNote || typeof rootNote !== 'string') return [];
   if (!typeId || typeof typeId !== 'string') return [];
@@ -1280,5 +1861,53 @@ export const generateFretboardMap = (rootNote: string, typeId: string, numFrets 
     }
   });
 
-  return result;
+  if (inversion === 0) return result;
+
+  const bassInterval = getInversionBassInterval(arpeggio.intervals, inversion);
+  return filterNotesForInversion(result, bassInterval, tuning);
 };
+
+const BOX_OFFSETS: Record<1 | 2 | 3 | 4 | 5, { min: number; max: number }> = {
+  1: { min: 0, max: 3 },
+  2: { min: 3, max: 5 },
+  3: { min: 5, max: 8 },
+  4: { min: 7, max: 10 },
+  5: { min: 10, max: 12 },
+};
+
+export const generateScaleBoxFretboardMap = (
+  rootNote: string,
+  scaleId: string,
+  box: 1 | 2 | 3 | 4 | 5,
+  numFrets = 24,
+  tuning: number[] = STRING_TUNING
+): FretNote[] => {
+  const allNotes = generateScaleFretboardMap(rootNote, scaleId, numFrets, tuning);
+  if (!allNotes.length) return [];
+
+  const lowEIndex = tuning[5];
+  if (lowEIndex === undefined) return allNotes;
+
+  const rootFretOnLowE = findRootFretOnString(rootNote, lowEIndex, numFrets);
+  if (rootFretOnLowE == null) return allNotes;
+
+  const window = BOX_OFFSETS[box];
+  const minFret = rootFretOnLowE + window.min;
+  const maxFret = rootFretOnLowE + window.max;
+
+  return allNotes.filter((n) => n.fret >= minFret && n.fret <= maxFret);
+};
+
+export const generateBluesBoxFretboardMap = (
+  rootNote: string,
+  box: 1 | 2 | 3 | 4 | 5,
+  numFrets = 24,
+  tuning: number[] = STRING_TUNING
+) => generateScaleBoxFretboardMap(rootNote, "blues", box, numFrets, tuning);
+
+export const generateHarmonicMinorBoxFretboardMap = (
+  rootNote: string,
+  box: 1 | 2 | 3 | 4 | 5,
+  numFrets = 24,
+  tuning: number[] = STRING_TUNING
+) => generateScaleBoxFretboardMap(rootNote, "harmonicMinor", box, numFrets, tuning);

@@ -2,7 +2,7 @@
 
 **ArpVision** is a comprehensive, interactive guitar fretboard visualizer that helps guitarists understand and master arpeggios, scales, modes, and chord shapes. Built with precision and attention to musical accuracy, ArpVision provides a beautiful, intuitive interface for exploring the guitar neck.
 
-![Version](https://img.shields.io/badge/version-2.3-purple)
+![Version](https://img.shields.io/badge/version-3.0-purple)
 ![License](https://img.shields.io/badge/license-MIT-green)
 ![TypeScript](https://img.shields.io/badge/TypeScript-5.6-blue)
 ![React](https://img.shields.io/badge/React-19-blue)
@@ -40,15 +40,26 @@
 - Visual filtering to show specific box patterns on the fretboard
 
 ### Hot Licks
-- **Artist Presets** - Famous arpeggio licks from legendary guitarists:
-  - Randy Rhoads - Mr. Crowley Intro
-  - Eddie Van Halen - Eruption Tapping
-  - Yngwie Malmsteen - Diminished Sweep
-  - Slash - Sweet Child Intro
-  - David Gilmour - Shine On Arp
-  - Jeff Beck - Singing D Major Arp
-  - Jimmy Page - Black Dog A7 Arp
+- **28+ Artist Presets** — Randy Rhoads, Prince, Duane Allman, EVH, Yngwie, Slash, Gilmour, Beck, Page
+- **Lick Browser** — Search, filter by genre/difficulty, animated playback with audio
 - Exact fret/string positions with musical context
+
+### Practice & Theory Tools
+- **Audio playback** — Click notes or play licks with Web Audio
+- **Metronome** and **backing track loops** (chord-tone arpeggios)
+- **Chord progressions** — ii–V–I, blues, pop, rock cadences
+- **Scale-over-chord suggestions** — Contextual scale recommendations
+- **Chord inversions** — Root, 1st, and 2nd inversion with bass highlighting
+- **Diads** — Double-stop patterns with visual pair connections
+- **Sweep & Tapping** — Technique pattern library
+- **Blues & Harmonic Minor boxes** — Position-based scale boxes
+
+### Display & Sharing
+- **Note names**, **left-handed layout**, **open strings**, **fret range** controls
+- **Compare mode** — Side-by-side chord comparison
+- **Shareable URLs** — Copy link with full app state
+- **Custom patterns** — Save patterns locally in your browser
+- **Sticky fretboard** — Fretboard follows scroll on desktop
 
 ### UI Features
 - **Smart Note Display** - Color-coded intervals (Root, 3rd, 5th, 7th, extensions)
@@ -84,7 +95,7 @@
    ```
 
 4. **Open your browser**
-   Navigate to `http://localhost:5000` (or the port shown in terminal)
+   Navigate to `http://localhost:5002` (or the port shown in terminal)
 
 ### Development Commands
 
@@ -261,23 +272,22 @@ For detailed iOS setup instructions, see:
 ## 📁 Project Structure
 
 ```
-Guitar_Arpeggios-main/
+ArpVision/
 ├── client/                    # Frontend React application
 │   ├── src/
 │   │   ├── components/
-│   │   │   ├── Fretboard.tsx      # Main fretboard visualization
-│   │   │   └── ui/                 # UI component library (Radix UI)
+│   │   │   ├── Fretboard.tsx          # Main fretboard visualization
+│   │   │   ├── arpvision/             # Settings, practice, licks, progressions
+│   │   │   └── ui/                    # UI component library (Radix UI)
 │   │   ├── lib/
-│   │   │   ├── music-theory.ts     # All music theory data & logic
-│   │   │   ├── queryClient.ts      # React Query configuration
-│   │   │   └── utils.ts            # Utility functions
-│   │   ├── pages/
-│   │   │   ├── home.tsx            # Main application page
-│   │   │   └── not-found.tsx       # 404 page
-│   │   ├── hooks/                  # Custom React hooks
-│   │   ├── App.tsx                 # Root component
-│   │   └── main.tsx                # Entry point
-│   └── index.html
+│   │   │   ├── music-theory.ts        # Music theory data & logic
+│   │   │   ├── audio-engine.ts        # Web Audio playback
+│   │   │   ├── app-settings.ts        # Settings & custom patterns (localStorage)
+│   │   │   ├── url-state.ts           # Shareable URL state
+│   │   │   ├── chord-progressions.ts  # Progressions & scale suggestions
+│   │   │   └── practice-data.ts       # Sweep, tapping, backing tracks
+│   │   └── pages/
+│   │       └── home.tsx               # Main application page
 ├── server/                    # Express backend
 │   ├── index.ts               # Server entry point
 │   ├── routes.ts              # API routes
@@ -352,4 +362,4 @@ For questions, suggestions, or support:
 
 **Made with ❤️ for guitarists everywhere**
 
-*ArpVision 2.3 - Visualize. Understand. Master.*
+*ArpVision 3.0 — Visualize. Understand. Master.*
