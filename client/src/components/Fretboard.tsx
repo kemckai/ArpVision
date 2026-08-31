@@ -1,7 +1,13 @@
 import React, { useMemo, useCallback } from "react";
 import { motion } from "framer-motion";
-import { FretNote, NOTES, formatNoteNameWithFlat } from "../lib/music-theory";
+import { FretNote, NOTES, formatNoteNameWithFlat, getIntervalName } from "../lib/music-theory";
 import { cn } from "@/lib/utils";
+
+export type ChordToneDisplay = {
+  noteName: string;
+  interval: number;
+  isBass?: boolean;
+};
 
 interface FretboardProps {
   activeNotes: FretNote[];
@@ -18,9 +24,22 @@ interface FretboardProps {
   bassInterval?: number | null;
   compact?: boolean;
   onNoteClick?: (stringIdx: number, fret: number) => void;
+  chordTones?: ChordToneDisplay[];
+  inversionActive?: boolean;
+  hotLickMode?: boolean;
 }
 
 const FRET_MARKERS = [3, 5, 7, 9, 12, 15, 17, 19, 21, 24];
+
+// High E (0) thinnest → low E (5) thickest
+const STRING_THICKNESS: Record<number, string> = {
+  0: "h-px",
+  1: "h-px",
+  2: "h-[1.5px]",
+  3: "h-[2px]",
+  4: "h-[2.5px]",
+  5: "h-[3px]",
+};
 
 export const Fretboard: React.FC<FretboardProps> = ({
   activeNotes,
@@ -36,6 +55,9 @@ export const Fretboard: React.FC<FretboardProps> = ({
   bassInterval = null,
   compact = false,
   onNoteClick,
+  chordTones,
+  inversionActive = false,
+  hotLickMode = false,
 }) => {
   const displayFrets = useMemo(() => {
     const frets: number[] = [];
@@ -79,6 +101,17 @@ export const Fretboard: React.FC<FretboardProps> = ({
   const isStepActive = (stringIdx: number, fret: number) =>
     stepPosition?.string === stringIdx && stepPosition?.fret === fret;
 
+  const fretXPercent = useCallback(
+    (colIdx: number, fret: number) => {
+      if (fret === 0) return ((colIdx + 0.5) / numFretCols) * 100;
+      return (colIdx / numFretCols) * 100;
+    },
+    [numFretCols]
+  );
+
+  const noteLeftStyle = (fret: number) =>
+    fret === 0 ? "50%" : "0%";
+
   return (
     <div className={cn("w-full overflow-x-auto", compact ? "pb-4" : "pb-10")}>
       <div
@@ -88,17 +121,45 @@ export const Fretboard: React.FC<FretboardProps> = ({
           {displayFrets.map((fret) => (
             <div
               key={fret}
-              className="flex-1 text-center text-muted-foreground text-xs font-mono opacity-50"
+              className="flex-1 text-center text-muted-foreground text-xs font-mono font-semibold"
             >
               {fret === 0 ? "O" : fret}
             </div>
           ))}
         </div>
 
-        <div className="relative bg-[#2a2a2a] rounded-r-lg shadow-2xl border-y border-r border-white/10 py-8">
-          <div className="absolute left-12 top-0 bottom-0 w-[3px] bg-[#f5f5f5] z-10 shadow-md border-r border-black/40" />
+        <div
+          className={cn(
+            "relative bg-[#2a2218] rounded-r-lg shadow-2xl border-y border-r border-[#1a1510] overflow-hidden",
+            compact ? "py-4" : "py-6"
+          )}
+        >
+          {/* Nut */}
+          <div className="absolute left-12 top-0 bottom-0 w-1.5 bg-gradient-to-r from-[#f0e6d3] via-[#fff8ee] to-[#c9b896] z-20 shadow-[2px_0_6px_rgba(0,0,0,0.5)]" />
 
-          <div className="flex flex-col justify-between h-[200px] relative z-20 px-12">
+          {/* Fret spaces + metal fret wires */}
+          <div className="absolute inset-0 left-12 flex pointer-events-none z-0">
+            {displayFrets.map((fret, colIdx) => (
+              <div
+                key={`fret-space-${fret}`}
+                className={cn(
+                  "flex-1 h-full",
+                  colIdx % 2 === 0 ? "bg-[#3d2e1f]" : "bg-[#342818]"
+                )}
+              >
+                {colIdx > 0 && (
+                  <div className="h-full w-[3px] -ml-[1.5px] bg-gradient-to-r from-[#6b6b6b] via-[#e2e2e2] to-[#6b6b6b] shadow-[0_0_4px_rgba(255,255,255,0.15)]" />
+                )}
+              </div>
+            ))}
+          </div>
+
+          <div
+            className={cn(
+              "relative z-10 px-12 grid grid-rows-6",
+              compact ? "h-[168px]" : "h-[228px]"
+            )}
+          >
             {pairGroups && pairGroups.length > 0 && (
               <svg
                 className="absolute inset-0 pointer-events-none z-25"
@@ -113,8 +174,8 @@ export const Fretboard: React.FC<FretboardProps> = ({
                   if (idxA < 0 || idxB < 0) return null;
                   const strA = strings.indexOf(a.string);
                   const strB = strings.indexOf(b.string);
-                  const x1 = ((idxA + 0.5) / numFretCols) * 100;
-                  const x2 = ((idxB + 0.5) / numFretCols) * 100;
+                  const x1 = fretXPercent(idxA, a.fret);
+                  const x2 = fretXPercent(idxB, b.fret);
                   const y1 = ((strA + 0.5) / 6) * 100;
                   const y2 = ((strB + 0.5) / 6) * 100;
                   return (
@@ -137,20 +198,20 @@ export const Fretboard: React.FC<FretboardProps> = ({
               const openNoteName = NOTES[tuning[stringIdx]];
 
               return (
-                <div key={stringIdx} className="relative w-full h-full flex items-center group">
+                <div key={stringIdx} className="relative w-full flex items-center">
                   <div className="absolute -left-10 w-8 text-right text-sm font-bold text-muted-foreground font-mono">
                     {formatNoteNameWithFlat(openNoteName)}
                   </div>
 
                   <div
                     className={cn(
-                      "absolute w-full bg-[#888] shadow-sm group-hover:bg-[#bbb] transition-colors",
-                      stringIdx > 2 ? "h-[2px]" : "h-[1px]"
+                      "absolute left-0 right-0 rounded-full bg-gradient-to-b from-[#e8e8e8] via-[#b8b8b8] to-[#888888] shadow-[0_1px_2px_rgba(0,0,0,0.6)] z-20",
+                      STRING_THICKNESS[stringIdx] ?? "h-px"
                     )}
                   />
 
-                  <div className="flex w-full h-full relative">
-                    {displayFrets.map((displayFret) => {
+                  <div className="flex w-full h-full relative z-30">
+                    {displayFrets.map((displayFret, colIdx) => {
                       const note = getNoteAtPos(stringIdx, displayFret);
                       const highlighted = isHighlighted(stringIdx, displayFret);
                       const isGhost = highlightPositions && !highlighted;
@@ -160,17 +221,19 @@ export const Fretboard: React.FC<FretboardProps> = ({
                       return (
                         <div
                           key={displayFret}
-                          className="flex-1 relative flex items-center justify-center border-r border-white/5 h-full"
+                          className="flex-1 relative h-full"
                         >
                           {stringIdx === 2 && FRET_MARKERS.includes(displayFret) && (
-                            <div className="absolute top-1/2 -translate-y-1/2 flex items-center justify-center gap-2">
+                            <div
+                              className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex items-center justify-center gap-1.5 z-0"
+                            >
                               {displayFret === 12 ? (
                                 <>
-                                  <div className="w-3 h-3 rounded-full bg-[#444] shadow-inner" />
-                                  <div className="w-3 h-3 rounded-full bg-[#444] shadow-inner" />
+                                  <div className="w-2.5 h-2.5 rounded-full bg-[#1a1410]/70 border border-white/10 shadow-inner" />
+                                  <div className="w-2.5 h-2.5 rounded-full bg-[#1a1410]/70 border border-white/10 shadow-inner" />
                                 </>
                               ) : (
-                                <div className="w-3 h-3 rounded-full bg-[#444] shadow-inner" />
+                                <div className="w-2.5 h-2.5 rounded-full bg-[#1a1410]/70 border border-white/10 shadow-inner" />
                               )}
                             </div>
                           )}
@@ -183,8 +246,9 @@ export const Fretboard: React.FC<FretboardProps> = ({
                                 opacity: isGhost ? 0.25 : 1,
                               }}
                               onClick={() => onNoteClick?.(stringIdx, displayFret)}
+                              style={{ left: noteLeftStyle(displayFret) }}
                               className={cn(
-                                "rounded-full flex items-center justify-center font-bold shadow-lg z-30 cursor-pointer transition-all",
+                                "absolute top-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full flex items-center justify-center font-bold shadow-lg z-30 cursor-pointer transition-all",
                                 compact ? "w-7 h-7 text-xs" : "w-9 h-9 md:w-10 md:h-10 text-sm md:text-base",
                                 isGhost ? "ring-0 bg-black/60 text-white/40" : "ring-2 hover:scale-110",
                                 isStep && "ring-4 ring-orange-400 bg-orange-500 text-white",
@@ -231,7 +295,10 @@ export const Fretboard: React.FC<FretboardProps> = ({
                           )}
 
                           {note && highlighted && highlightPositions && !isStep && (
-                            <motion.div className="absolute w-10 h-10 rounded-full border-2 border-white/50 animate-pulse z-40 pointer-events-none" />
+                            <motion.div
+                              className="absolute top-1/2 -translate-x-1/2 -translate-y-1/2 w-10 h-10 rounded-full border-2 border-white/50 animate-pulse z-40 pointer-events-none"
+                              style={{ left: noteLeftStyle(displayFret) }}
+                            />
                           )}
                         </div>
                       );
@@ -243,8 +310,52 @@ export const Fretboard: React.FC<FretboardProps> = ({
           </div>
         </div>
 
+        {!compact && chordTones && chordTones.length > 0 && (
+          <div className="mt-6 pt-6 border-t border-white/10 px-4">
+            <div className="flex flex-wrap gap-3 justify-center">
+              {chordTones.map((tone) => {
+                const isRoot = tone.interval === 0;
+                const isBass = inversionActive && tone.isBass;
+                return (
+                  <div
+                    key={`${tone.noteName}-${tone.interval}`}
+                    className={cn(
+                      "flex flex-col items-center justify-center w-14 h-16 rounded-lg border transition-all",
+                      isBass
+                        ? "bg-primary/30 border-primary shadow-[0_0_12px_rgba(124,58,237,0.3)]"
+                        : isRoot
+                        ? hotLickMode
+                          ? "bg-orange-500/20 border-orange-500/50"
+                          : "bg-primary/20 border-primary/50"
+                        : "bg-[#333] border-white/10"
+                    )}
+                  >
+                    <span
+                      className={cn(
+                        "text-lg font-bold font-display",
+                        isBass
+                          ? "text-primary"
+                          : isRoot
+                          ? hotLickMode
+                            ? "text-orange-100"
+                            : "text-white"
+                          : "text-white/90"
+                      )}
+                    >
+                      {formatNoteNameWithFlat(tone.noteName)}
+                    </span>
+                    <span className="text-[9px] text-muted-foreground font-mono uppercase mt-0.5 font-bold">
+                      {isBass ? "Bass" : isRoot ? "Root" : getIntervalName(tone.interval)}
+                    </span>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        )}
+
         {!compact && (
-          <div className="mt-12 flex flex-wrap gap-8 justify-center text-sm text-muted-foreground/80 font-medium">
+          <div className="mt-8 flex flex-wrap gap-8 justify-center text-sm text-muted-foreground/80 font-medium">
             <div className="flex items-center gap-2">
               <div className="w-3 h-3 rounded-full bg-primary shadow-sm border border-primary/60" />
               <span>Root (R)</span>

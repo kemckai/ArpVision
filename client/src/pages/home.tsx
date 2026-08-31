@@ -28,7 +28,6 @@ import {
   TUNINGS,
   getChordIntervalLabel,
   getIntervalName,
-  formatNoteNameWithFlat,
   getMaxInversion,
   getRotatedChordIntervals,
   INVERSION_LABELS,
@@ -1430,6 +1429,9 @@ export default function Home() {
                   activeStep={lickStep}
                   bassInterval={bassInterval}
                   onNoteClick={handleNoteClick}
+                  chordTones={chordTones}
+                  inversionActive={effectiveInversion > 0}
+                  hotLickMode={!!activeLick}
                 />
 
                 {settings.compareMode && (
@@ -1454,71 +1456,6 @@ export default function Home() {
                 )}
               </CardContent>
             </Card>
-
-            {/* Theory Breakdown & Info Grid */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-              <Card className="border-white/10 bg-card/40">
-                <CardHeader className="pb-3 pt-5 px-5">
-                  <CardTitle className="font-display uppercase tracking-wider text-sm text-muted-foreground">
-                    {activeLick
-                      ? "Notes in Hot Lick"
-                      : currentDoubleStop
-                      ? "Notes in Diad"
-                      : currentCagedShape
-                      ? "Notes in Caged Shape"
-                      : currentScale || currentPent || currentMode
-                      ? "Notes in Scale"
-                      : "Notes in Chord"}
-                  </CardTitle>
-                </CardHeader>
-                <CardContent className="px-5 pb-5">
-                  <div className="flex flex-wrap gap-4">
-                    {chordTones.map((tone) => {
-                      const isRoot = tone.interval === 0;
-                      const isBass = "isBass" in tone && tone.isBass;
-                      return (
-                        <div
-                          key={`${tone.noteName}-${tone.interval}`}
-                          className={cn(
-                            "flex flex-col items-center justify-center w-16 h-20 rounded-lg border transition-all hover:scale-105 cursor-default",
-                            isBass && effectiveInversion > 0
-                              ? "bg-primary/30 border-primary shadow-[0_0_15px_rgba(124,58,237,0.3)]"
-                              : isRoot
-                              ? "bg-primary/20 border-primary/50 shadow-[0_0_15px_rgba(124,58,237,0.2)]"
-                              : "bg-secondary/50 border-white/5",
-                            activeLick && isRoot
-                              ? "bg-orange-500/20 border-orange-500/50 shadow-[0_0_15px_rgba(249,115,22,0.2)]"
-                              : ""
-                          )}
-                        >
-                          <span
-                            className={cn(
-                              "text-2xl font-bold font-display",
-                              isBass && effectiveInversion > 0
-                                ? "text-primary"
-                                : isRoot
-                                ? activeLick
-                                  ? "text-orange-100"
-                                  : "text-white"
-                                : "text-foreground"
-                            )}
-                          >
-                            {formatNoteNameWithFlat(tone.noteName)}
-                          </span>
-                          <span className="text-[10px] text-muted-foreground font-mono uppercase mt-1 font-bold">
-                            {isBass && effectiveInversion > 0
-                              ? "Bass"
-                              : isRoot
-                              ? "Root"
-                              : getIntervalName(tone.interval)}
-                          </span>
-                        </div>
-                      );
-                    })}
-                  </div>
-                </CardContent>
-              </Card>
-            </div>
           </div>
         </div>
       </div>
