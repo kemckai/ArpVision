@@ -164,6 +164,33 @@ The configuration includes:
 
 **Note**: The Vercel deployment uses `vercel-build` which only builds the client. For full-stack deployments with Express, use `npm run build`.
 
+### Deploy to Railway
+
+ArpVision includes a `railway.toml` for full-stack deployment (Express + static client).
+
+1. **Install the Railway CLI** (if needed)
+   ```bash
+   npm i -g @railway/cli
+   railway login
+   ```
+
+2. **Create and link a project**
+   ```bash
+   railway init --name ArpVision
+   ```
+
+3. **Deploy**
+   ```bash
+   railway up
+   ```
+
+4. **Generate a public URL**
+   ```bash
+   railway domain
+   ```
+
+Railway runs `npm ci && npm run build` then `npm start`. The server listens on `$PORT` and serves the built client from `dist/public`.
+
 ## 📱 iOS Development (Capacitor)
 
 ArpVision includes Capacitor integration for iOS deployment:
