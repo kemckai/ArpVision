@@ -717,374 +717,387 @@ export const FAMOUS_LICKS: Lick[] = [
     id: "rhoads-crowley",
     artist: "Randy Rhoads",
     name: "Mr. Crowley Intro",
-    description: "The iconic neo-classical D Minor arpeggio that defines metal lead guitar. Descending triplet feel.",
+    description: "The iconic D minor neo-classical pull-off arpeggios from the Crowley solo — descending triplet figures.",
     root: "D",
     type: "min",
+    // Classic Rhoads phrase: e13p10 → B13-10 → e12p9 → B12-10
     positions: [
-      { string: 0, fret: 13 }, { string: 0, fret: 10 }, { string: 1, fret: 10 }, 
-      { string: 2, fret: 10 }, { string: 0, fret: 12 }, { string: 0, fret: 9 },
-      { string: 1, fret: 10 }, { string: 2, fret: 9 }
-    ]
+      { string: 0, fret: 13 }, { string: 0, fret: 10 }, { string: 1, fret: 13 }, { string: 1, fret: 10 },
+      { string: 0, fret: 12 }, { string: 0, fret: 9 }, { string: 1, fret: 12 }, { string: 1, fret: 10 },
+    ],
   },
   {
     id: "rhoads-crazy-train",
     artist: "Randy Rhoads",
-    name: "Crazy Train Solo Run",
-    description: "Harmonic minor ascending arpeggio from the Crazy Train solo. String-skipping neo-classical fire in E.",
-    root: "E",
+    name: "Crazy Train Riff",
+    description: "The F♯ minor main riff from Crazy Train — the most recognizable Rhoads rhythm figure.",
+    root: "F#",
     type: "min",
+    // Low E: 2-4-5-2-4-5, A: 4…
     positions: [
-      { string: 0, fret: 12 }, { string: 1, fret: 12 }, { string: 2, fret: 13 },
-      { string: 3, fret: 14 }, { string: 2, fret: 11 }, { string: 1, fret: 10 },
-      { string: 0, fret: 12 }, { string: 0, fret: 15 }
-    ]
+      { string: 5, fret: 2 }, { string: 5, fret: 4 }, { string: 5, fret: 5 },
+      { string: 5, fret: 2 }, { string: 5, fret: 4 }, { string: 5, fret: 5 },
+      { string: 4, fret: 4 }, { string: 5, fret: 2 },
+    ],
   },
   {
     id: "rhoads-goodbye",
     artist: "Randy Rhoads",
     name: "Goodbye to Romance",
-    description: "Sweeping F# minor triad cascade from Goodbye to Romance. Pure classical guitar influence on electric.",
+    description: "F♯ minor triad cascade from Goodbye to Romance — classical guitar influence on electric.",
     root: "F#",
     type: "min",
+    // F#m triad shape around 9–14: F#–A–C#
     positions: [
       { string: 0, fret: 14 }, { string: 1, fret: 14 }, { string: 2, fret: 11 },
-      { string: 3, fret: 11 }, { string: 2, fret: 9 }, { string: 1, fret: 9 },
-      { string: 0, fret: 11 }, { string: 0, fret: 14 }
-    ]
+      { string: 1, fret: 10 }, { string: 0, fret: 9 }, { string: 1, fret: 10 },
+      { string: 2, fret: 11 }, { string: 0, fret: 14 },
+    ],
   },
   {
     id: "rhoads-dee",
     artist: "Randy Rhoads",
     name: "Dee (Classical Etude)",
-    description: "The arpeggiated D major figure from Dee — Randy's unaccompanied classical piece. Delicate and precise.",
+    description: "Arpeggiated D major figure from Dee — Randy's unaccompanied classical piece.",
     root: "D",
     type: "maj",
+    // D major open/classical voicing outline: D–F#–A–D
     positions: [
-      { string: 0, fret: 10 }, { string: 1, fret: 10 }, { string: 2, fret: 11 },
-      { string: 3, fret: 12 }, { string: 2, fret: 14 }, { string: 1, fret: 12 },
-      { string: 0, fret: 10 }, { string: 0, fret: 7 }
-    ]
+      { string: 3, fret: 0 }, { string: 2, fret: 2 }, { string: 1, fret: 3 },
+      { string: 0, fret: 2 }, { string: 1, fret: 3 }, { string: 2, fret: 2 },
+      { string: 3, fret: 0 }, { string: 4, fret: 0 },
+    ],
   },
   {
     id: "rhoads-revelation",
     artist: "Randy Rhoads",
     name: "Revelation (Mother Earth)",
-    description: "B minor neo-classical arpeggio from Revelation. Ascending triad sweep with Randy's signature clarity.",
+    description: "B minor neo-classical arpeggio from Revelation — ascending triad with Randy's clarity.",
     root: "B",
     type: "min",
+    // Bm triad: B–D–F#
     positions: [
-      { string: 0, fret: 7 }, { string: 1, fret: 7 }, { string: 2, fret: 4 },
-      { string: 3, fret: 4 }, { string: 2, fret: 6 }, { string: 1, fret: 6 },
-      { string: 0, fret: 7 }, { string: 0, fret: 10 }
-    ]
+      { string: 0, fret: 7 }, { string: 1, fret: 7 }, { string: 2, fret: 7 },
+      { string: 3, fret: 9 }, { string: 2, fret: 7 }, { string: 1, fret: 7 },
+      { string: 0, fret: 7 }, { string: 0, fret: 10 },
+    ],
   },
   {
     id: "rhoads-flying",
     artist: "Randy Rhoads",
     name: "Flying High Again",
-    description: "Upper-register A minor arpeggio burst from Flying High Again. Fast alternate-picked classical sequence.",
+    description: "Upper-register A minor arpeggio burst from Flying High Again.",
     root: "A",
     type: "min",
+    // Am: A–C–E around 12–17
     positions: [
-      { string: 0, fret: 17 }, { string: 0, fret: 15 }, { string: 1, fret: 17 },
-      { string: 2, fret: 14 }, { string: 2, fret: 13 }, { string: 1, fret: 15 },
-      { string: 0, fret: 17 }, { string: 0, fret: 20 }
-    ]
+      { string: 0, fret: 12 }, { string: 0, fret: 15 }, { string: 0, fret: 17 },
+      { string: 1, fret: 13 }, { string: 1, fret: 17 }, { string: 0, fret: 17 },
+      { string: 0, fret: 15 }, { string: 0, fret: 12 },
+    ],
   },
   {
     id: "rhoads-suicide",
     artist: "Randy Rhoads",
     name: "Suicide Solution Intro",
-    description: "D harmonic minor descending figure from Suicide Solution. Dark neo-classical phrasing with wide intervals.",
+    description: "D harmonic minor descending figure from Suicide Solution — dark neo-classical phrasing.",
     root: "D",
     type: "min",
+    // D harmonic minor color: D–F–A–C#
     positions: [
-      { string: 0, fret: 10 }, { string: 0, fret: 8 }, { string: 1, fret: 10 },
-      { string: 2, fret: 9 }, { string: 3, fret: 10 }, { string: 2, fret: 7 },
-      { string: 1, fret: 7 }, { string: 0, fret: 7 }
-    ]
+      { string: 0, fret: 10 }, { string: 0, fret: 13 }, { string: 1, fret: 10 },
+      { string: 1, fret: 13 }, { string: 2, fret: 10 }, { string: 2, fret: 14 },
+      { string: 1, fret: 10 }, { string: 0, fret: 10 },
+    ],
   },
   {
     id: "rhoads-dim",
     artist: "Randy Rhoads",
     name: "Diminished Cascade",
-    description: "Randy's favorite diminished 7th sweep pattern — used across Crowley, Crazy Train, and live solos.",
+    description: "Randy's favorite diminished 7th sweep — A–C–E♭–G♭ across the top strings.",
     root: "A",
     type: "dim7",
     positions: [
       { string: 0, fret: 17 }, { string: 0, fret: 14 }, { string: 1, fret: 16 },
       { string: 2, fret: 17 }, { string: 2, fret: 14 }, { string: 3, fret: 16 },
-      { string: 3, fret: 13 }, { string: 2, fret: 14 }
-    ]
+      { string: 3, fret: 13 }, { string: 2, fret: 14 },
+    ],
   },
   {
     id: "prince-purple-rain",
     artist: "Prince",
     name: "Purple Rain Solo",
-    description: "The soulful Bb major arpeggio from the Purple Rain outro. Emotional bends and ringing open-voiced triads.",
+    description: "Soulful B♭ major phrase from the Purple Rain outro — ringing triad tones and emotional bends.",
     root: "A#",
     type: "maj",
+    // Bb major around 6th: Bb–D–F
     positions: [
       { string: 0, fret: 6 }, { string: 1, fret: 6 }, { string: 2, fret: 7 },
-      { string: 3, fret: 8 }, { string: 2, fret: 10 }, { string: 1, fret: 11 },
-      { string: 0, fret: 13 }, { string: 0, fret: 15 }
-    ]
+      { string: 3, fret: 8 }, { string: 2, fret: 7 }, { string: 1, fret: 6 },
+      { string: 0, fret: 6 }, { string: 0, fret: 10 },
+    ],
   },
   {
     id: "prince-kiss",
     artist: "Prince",
     name: "Kiss",
-    description: "The stripped-down funk figure from Kiss. Staccato A7 hits — minimal notes, maximum groove.",
+    description: "Stripped-down A7 funk stabs from Kiss — minimal notes, maximum groove.",
     root: "A",
     type: "dom7",
+    // A7 chord tones at 5th: A–C#–E–G
     positions: [
-      { string: 0, fret: 5 }, { string: 1, fret: 5 }, { string: 2, fret: 5 },
-      { string: 3, fret: 7 }, { string: 2, fret: 5 }, { string: 1, fret: 5 },
-      { string: 0, fret: 8 }, { string: 0, fret: 5 }
-    ]
+      { string: 0, fret: 5 }, { string: 1, fret: 5 }, { string: 2, fret: 6 },
+      { string: 3, fret: 5 }, { string: 2, fret: 6 }, { string: 1, fret: 5 },
+      { string: 0, fret: 5 }, { string: 0, fret: 8 },
+    ],
   },
   {
     id: "prince-go-crazy",
     artist: "Prince",
     name: "Let's Go Crazy",
-    description: "The ascending B major arpeggio from the Let's Go Crazy intro break. Church on Sunday, party all night.",
+    description: "Ascending B major figure from the Let's Go Crazy intro break.",
     root: "B",
     type: "maj",
+    // B major: B–D#–F#
     positions: [
-      { string: 0, fret: 7 }, { string: 1, fret: 7 }, { string: 2, fret: 4 },
-      { string: 3, fret: 4 }, { string: 4, fret: 2 }, { string: 3, fret: 4 },
-      { string: 2, fret: 4 }, { string: 0, fret: 7 }
-    ]
+      { string: 5, fret: 7 }, { string: 4, fret: 9 }, { string: 3, fret: 9 },
+      { string: 2, fret: 8 }, { string: 1, fret: 7 }, { string: 0, fret: 7 },
+      { string: 1, fret: 7 }, { string: 0, fret: 7 },
+    ],
   },
   {
     id: "prince-doves-cry",
     artist: "Prince",
     name: "When Doves Cry",
-    description: "Crystalline A minor phrase from the When Doves Cry solo. Sparse, icy, and impossibly funky.",
+    description: "Sparse A minor phrase from When Doves Cry — icy, economical, and funky.",
     root: "A",
     type: "min",
+    // Am: A–C–E
     positions: [
-      { string: 0, fret: 5 }, { string: 0, fret: 8 }, { string: 1, fret: 8 },
-      { string: 2, fret: 7 }, { string: 2, fret: 5 }, { string: 1, fret: 5 },
-      { string: 0, fret: 5 }, { string: 0, fret: 12 }
-    ]
+      { string: 0, fret: 5 }, { string: 0, fret: 8 }, { string: 1, fret: 5 },
+      { string: 1, fret: 8 }, { string: 2, fret: 5 }, { string: 2, fret: 7 },
+      { string: 1, fret: 5 }, { string: 0, fret: 5 },
+    ],
   },
   {
     id: "prince-cream",
     artist: "Prince",
     name: "Cream",
-    description: "Blues-funk A7 lick from Cream. Dirty bends and stabbing rhythm hits in the pocket.",
+    description: "Blues-funk A7 lick from Cream — dirty bends and pocket rhythm hits.",
     root: "A",
     type: "dom7",
     positions: [
-      { string: 0, fret: 5 }, { string: 1, fret: 8 }, { string: 0, fret: 5 },
-      { string: 2, fret: 7 }, { string: 2, fret: 5 }, { string: 1, fret: 8 },
-      { string: 0, fret: 10 }, { string: 0, fret: 8 }
-    ]
+      { string: 0, fret: 5 }, { string: 0, fret: 8 }, { string: 1, fret: 5 },
+      { string: 1, fret: 8 }, { string: 2, fret: 5 }, { string: 2, fret: 7 },
+      { string: 0, fret: 8 }, { string: 0, fret: 5 },
+    ],
   },
   {
     id: "prince-raspberry",
     artist: "Prince",
     name: "Raspberry Beret",
-    description: "The jangly G major riff from Raspberry Beret. Pop-funk arpeggio with a Beatlesque charm.",
+    description: "Jangly G major figure from Raspberry Beret — pop-funk with open-string ring.",
     root: "G",
     type: "maj",
+    // G major with open G: G–B–D
     positions: [
-      { string: 0, fret: 3 }, { string: 1, fret: 3 }, { string: 2, fret: 0 },
-      { string: 2, fret: 2 }, { string: 1, fret: 3 }, { string: 0, fret: 3 },
-      { string: 0, fret: 5 }, { string: 0, fret: 7 }
-    ]
+      { string: 2, fret: 0 }, { string: 1, fret: 0 }, { string: 0, fret: 3 },
+      { string: 1, fret: 3 }, { string: 2, fret: 0 }, { string: 1, fret: 0 },
+      { string: 0, fret: 3 }, { string: 0, fret: 5 },
+    ],
   },
   {
     id: "prince-beautiful",
     artist: "Prince",
     name: "The Beautiful Ones",
-    description: "Heart-wrenching Bb major phrase from The Beautiful Ones. Slow, vocal-like bends in the upper register.",
+    description: "Heart-wrenching B♭ major phrase from The Beautiful Ones — slow, vocal-like upper-register bends.",
     root: "A#",
     type: "maj7",
+    // Bbmaj7 color: Bb–D–F–A
     positions: [
-      { string: 0, fret: 11 }, { string: 1, fret: 11 }, { string: 2, fret: 10 },
-      { string: 3, fret: 8 }, { string: 2, fret: 10 }, { string: 1, fret: 8 },
-      { string: 0, fret: 10 }, { string: 0, fret: 13 }
-    ]
+      { string: 0, fret: 6 }, { string: 0, fret: 10 }, { string: 1, fret: 6 },
+      { string: 1, fret: 11 }, { string: 2, fret: 7 }, { string: 1, fret: 6 },
+      { string: 0, fret: 6 }, { string: 0, fret: 13 },
+    ],
   },
   {
     id: "allman-layla",
     artist: "Duane Allman",
     name: "Layla Solo",
-    description: "The heart-wrenching D minor phrase from the Layla outro. Lyrical bends and crying sustain — Duane and Clapton trading souls.",
+    description: "Heart-wrenching D minor phrase from the Layla outro — lyrical bends and crying sustain.",
     root: "D",
     type: "min",
+    // Dm pentatonic box: D–F–G–A–C
     positions: [
-      { string: 0, fret: 10 }, { string: 0, fret: 13 }, { string: 1, fret: 13 },
-      { string: 2, fret: 12 }, { string: 2, fret: 10 }, { string: 1, fret: 10 },
-      { string: 0, fret: 10 }, { string: 0, fret: 15 }
-    ]
+      { string: 0, fret: 10 }, { string: 0, fret: 13 }, { string: 1, fret: 10 },
+      { string: 1, fret: 13 }, { string: 2, fret: 10 }, { string: 2, fret: 12 },
+      { string: 1, fret: 10 }, { string: 0, fret: 10 },
+    ],
   },
   {
     id: "allman-blue-sky",
     artist: "Duane Allman",
     name: "Blue Sky",
-    description: "Sun-drenched D major pentatonic from Blue Sky. Pure Southern joy — singing, open, and effortlessly melodic.",
+    description: "Sun-drenched D major pentatonic from Blue Sky — singing, open Southern melody.",
     root: "D",
     type: "maj",
+    // D maj pent: D–E–F#–A–B
     positions: [
-      { string: 0, fret: 10 }, { string: 0, fret: 12 }, { string: 0, fret: 15 },
-      { string: 1, fret: 12 }, { string: 2, fret: 11 }, { string: 2, fret: 14 },
-      { string: 1, fret: 15 }, { string: 0, fret: 17 }
-    ]
+      { string: 0, fret: 10 }, { string: 0, fret: 12 }, { string: 0, fret: 14 },
+      { string: 1, fret: 10 }, { string: 1, fret: 12 }, { string: 2, fret: 11 },
+      { string: 1, fret: 12 }, { string: 0, fret: 14 },
+    ],
   },
   {
     id: "allman-statesboro",
     artist: "Duane Allman",
     name: "Statesboro Blues",
-    description: "Duane's slide-inspired E blues figure from Statesboro Blues. Raw Delta fire channeled through Marshall stacks.",
+    description: "E blues figure in the spirit of Duane's Statesboro Blues (originally open-E slide).",
     root: "E",
     type: "min",
+    // E minor pentatonic / blues box 1
     positions: [
-      { string: 0, fret: 12 }, { string: 0, fret: 15 }, { string: 1, fret: 15 },
-      { string: 2, fret: 14 }, { string: 2, fret: 12 }, { string: 1, fret: 12 },
-      { string: 0, fret: 12 }, { string: 0, fret: 10 }
-    ]
+      { string: 0, fret: 12 }, { string: 0, fret: 15 }, { string: 1, fret: 12 },
+      { string: 1, fret: 15 }, { string: 2, fret: 12 }, { string: 2, fret: 14 },
+      { string: 1, fret: 12 }, { string: 0, fret: 12 },
+    ],
   },
   {
     id: "allman-one-way",
     artist: "Duane Allman",
     name: "One Way Out",
-    description: "The stabbing A minor blues riff from One Way Out. Tight funk pocket with Duane's unmistakable tone.",
+    description: "Stabbing A minor blues riff from One Way Out — tight pocket, unmistakable Allman tone.",
     root: "A",
     type: "min",
     positions: [
       { string: 0, fret: 5 }, { string: 0, fret: 8 }, { string: 1, fret: 5 },
-      { string: 2, fret: 7 }, { string: 2, fret: 5 }, { string: 1, fret: 8 },
-      { string: 0, fret: 10 }, { string: 0, fret: 8 }
-    ]
+      { string: 1, fret: 8 }, { string: 2, fret: 5 }, { string: 2, fret: 7 },
+      { string: 0, fret: 8 }, { string: 0, fret: 5 },
+    ],
   },
   {
     id: "allman-whipping",
     artist: "Duane Allman",
     name: "Whipping Post",
-    description: "The ascending A minor run from Whipping Post. Urgent, modal, and building toward catharsis.",
+    description: "Ascending A minor run from Whipping Post — urgent and modal.",
     root: "A",
     type: "min",
     positions: [
-      { string: 0, fret: 8 }, { string: 0, fret: 10 }, { string: 1, fret: 10 },
-      { string: 2, fret: 9 }, { string: 2, fret: 7 }, { string: 1, fret: 8 },
-      { string: 0, fret: 8 }, { string: 0, fret: 12 }
-    ]
+      { string: 2, fret: 5 }, { string: 2, fret: 7 }, { string: 1, fret: 5 },
+      { string: 1, fret: 8 }, { string: 0, fret: 5 }, { string: 0, fret: 8 },
+      { string: 0, fret: 10 }, { string: 0, fret: 12 },
+    ],
   },
   {
     id: "allman-wonderin",
     artist: "Duane Allman",
     name: "Don't Keep Me Wonderin'",
-    description: "Bright A major pentatonic lick from Don't Keep Me Wonderin'. Bouncy, soulful, and rhythmically alive.",
+    description: "Bright A major pentatonic lick from Don't Keep Me Wonderin' — bouncy and soulful.",
     root: "A",
     type: "maj",
+    // A maj pent: A–B–C#–E–F#
     positions: [
       { string: 0, fret: 5 }, { string: 0, fret: 7 }, { string: 0, fret: 9 },
-      { string: 1, fret: 10 }, { string: 2, fret: 9 }, { string: 1, fret: 9 },
-      { string: 0, fret: 5 }, { string: 0, fret: 12 }
-    ]
+      { string: 1, fret: 5 }, { string: 1, fret: 7 }, { string: 2, fret: 6 },
+      { string: 1, fret: 7 }, { string: 0, fret: 9 },
+    ],
   },
   {
     id: "allman-stormy",
     artist: "Duane Allman",
     name: "Stormy Monday",
-    description: "Slow blues in A# from the Fillmore East Stormy Monday. Vocal bends and behind-the-bridge sweetness.",
+    description: "Slow blues in B♭ from the Fillmore East Stormy Monday — vocal bends and sustain.",
     root: "A#",
     type: "dom7",
+    // Bb blues box
     positions: [
-      { string: 0, fret: 6 }, { string: 0, fret: 9 }, { string: 1, fret: 8 },
-      { string: 2, fret: 8 }, { string: 2, fret: 6 }, { string: 1, fret: 6 },
-      { string: 0, fret: 6 }, { string: 0, fret: 11 }
-    ]
+      { string: 0, fret: 6 }, { string: 0, fret: 9 }, { string: 1, fret: 6 },
+      { string: 1, fret: 9 }, { string: 2, fret: 6 }, { string: 2, fret: 8 },
+      { string: 1, fret: 6 }, { string: 0, fret: 6 },
+    ],
   },
   {
     id: "evh-eruption",
     artist: "Eddie Van Halen",
     name: "Eruption Tapping",
-    description: "The groundbreaking tapping triad sequence. C# Minor triad tapped with the right hand.",
+    description: "The groundbreaking Eruption tapping opener — C♯ minor triad on the B string (tap–pull–hammer).",
     root: "C#",
     type: "min",
+    // Classic: tap 9, pull-off 2, hammer 5 on B string (C#–G#–B → C#m tones)
     positions: [
-      { string: 1, fret: 9 }, { string: 1, fret: 12 }, { string: 1, fret: 17 }, // Tapping pattern representation
-      { string: 1, fret: 9 }, { string: 1, fret: 12 }, { string: 1, fret: 17 }
-    ]
+      { string: 1, fret: 9 }, { string: 1, fret: 2 }, { string: 1, fret: 5 },
+      { string: 1, fret: 9 }, { string: 1, fret: 2 }, { string: 1, fret: 5 },
+      { string: 1, fret: 9 }, { string: 1, fret: 2 },
+    ],
   },
   {
     id: "yngwie-dim",
     artist: "Yngwie Malmsteen",
     name: "Diminished Sweep",
-    description: "A lightning fast A Diminished 7th sweep picking run across 3 strings.",
+    description: "Lightning-fast A diminished 7th sweep across the top strings.",
     root: "A",
     type: "dim7",
     positions: [
-      { string: 0, fret: 17 }, { string: 0, fret: 14 }, 
+      { string: 0, fret: 17 }, { string: 0, fret: 14 },
       { string: 1, fret: 16 }, { string: 2, fret: 17 },
-      { string: 2, fret: 14 }, { string: 3, fret: 16 }
-    ]
+      { string: 2, fret: 14 }, { string: 3, fret: 16 },
+      { string: 3, fret: 13 }, { string: 2, fret: 14 },
+    ],
   },
   {
     id: "slash-sweet",
     artist: "Slash",
     name: "Sweet Child Intro",
-    description: "Technically a riff based on a D Major scale pattern with string skipping.",
+    description: "The iconic Sweet Child O' Mine opening — D major string-skipping riff (standard-tuning frets).",
     root: "D",
-    type: "maj", // loosely
+    type: "maj",
+    // Famous motif: D12 → B15 → G14 → G12 → e15 → G14 → e14 → G14
     positions: [
-      { string: 2, fret: 12 }, { string: 0, fret: 15 }, { string: 1, fret: 14 }, { string: 2, fret: 12 }, 
-      { string: 0, fret: 14 }, { string: 2, fret: 12 }, { string: 0, fret: 14 }, { string: 1, fret: 14 }
-    ]
+      { string: 3, fret: 12 }, { string: 1, fret: 15 }, { string: 2, fret: 14 }, { string: 2, fret: 12 },
+      { string: 0, fret: 15 }, { string: 2, fret: 14 }, { string: 0, fret: 14 }, { string: 2, fret: 14 },
+    ],
   },
   {
     id: "gilmour-shine",
     artist: "David Gilmour",
     name: "Shine On 4-Note Arp",
-    description: "The haunting G Minor 4-note phrase that echoes through history.",
+    description: "The haunting Shine On You Crazy Diamond opening phrase — A♯–F–G–E.",
     root: "G",
     type: "min",
+    // Tab: D string 8 (A#) → B string 6 (F) → open G → open high E
     positions: [
-      { string: 2, fret: 12 }, { string: 1, fret: 11 }, { string: 0, fret: 10 }, { string: 0, fret: 13 }
-    ]
+      { string: 3, fret: 8 }, // A#
+      { string: 1, fret: 6 }, // F
+      { string: 2, fret: 0 }, // G
+      { string: 0, fret: 0 }, // E
+    ],
   },
   {
     id: "beck-sustain",
     artist: "Jeff Beck",
     name: "Singing D Major Arp",
-    description: "A vocal-style D major arpeggio figure, outlining pure 1–3–5 with wide vibrato on the top note.",
+    description: "Vocal-style D major arpeggio — 1–3–5 with wide vibrato on the top note.",
     root: "D",
     type: "maj",
-    // D major triad (D–F#–A) around 10th position, standard tuning (E B G D A E high→low)
-    // Pattern: high E (10) -> B (10) -> G (11) -> D (12) -> G (11) -> B (10) -> high E (10)
     positions: [
-      { string: 0, fret: 10 }, // D (R)
-      { string: 1, fret: 10 }, // A (5)
-      { string: 2, fret: 11 }, // F# (3)
-      { string: 3, fret: 12 }, // D (R)
-      { string: 2, fret: 11 }, // F# (3)
-      { string: 1, fret: 10 }, // A (5)
-      { string: 0, fret: 10 }  // D (R, sustain)
-    ]
+      { string: 0, fret: 10 }, { string: 1, fret: 10 }, { string: 2, fret: 11 },
+      { string: 3, fret: 12 }, { string: 2, fret: 11 }, { string: 1, fret: 10 },
+      { string: 0, fret: 10 },
+    ],
   },
   {
     id: "page-blackdog",
     artist: "Jimmy Page",
-    name: "Black Dog A7 Arp",
-    description: "An A7 arpeggio idea in the spirit of Black Dog: 1–3–5–b7 with a bluesy turnaround.",
+    name: "Black Dog Call",
+    description: "The signature Black Dog call riff in A — chromatic climb into the blues box.",
     root: "A",
-    type: "dom7",
-    // A7 arpeggio (A–C#–E–G) around 5th position.
-    // Pattern: high E (5) -> B (5) -> G (6) -> D (7) -> G (6) -> B (5) -> high E (5)
+    type: "min",
+    // Classic call: A7 → D5-6-7 → A7 → G5 → B5 → G7
     positions: [
-      { string: 0, fret: 5 }, // A (R)
-      { string: 1, fret: 5 }, // E (5)
-      { string: 2, fret: 6 }, // C# (3)
-      { string: 3, fret: 7 }, // A (R)
-      { string: 2, fret: 6 }, // C# (3)
-      { string: 1, fret: 5 }, // E (5)
-      { string: 0, fret: 5 }  // A (R)
-    ]
-  }
+      { string: 4, fret: 7 }, { string: 3, fret: 5 }, { string: 3, fret: 6 }, { string: 3, fret: 7 },
+      { string: 4, fret: 7 }, { string: 2, fret: 5 }, { string: 1, fret: 5 }, { string: 2, fret: 7 },
+    ],
+  },
 ];
 
 // Standard Guitar Tuning (Low E to High E)
