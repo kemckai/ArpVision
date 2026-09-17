@@ -2,16 +2,9 @@ import { NOTES } from "./music-theory";
 
 const A4 = 440;
 
-function noteToFrequency(noteIndex: number, octave = 4): number {
-  const semitonesFromA4 = noteIndex - 9 + (octave - 4) * 12;
-  return A4 * Math.pow(2, semitonesFromA4 / 12);
-}
-
-function fretToFrequency(openNoteIndex: number, fret: number): number {
-  const noteIndex = (openNoteIndex + fret) % 12;
-  const octave = 4 + Math.floor((openNoteIndex + fret) / 12);
-  return noteToFrequency(noteIndex, octave);
-}
+/** MIDI for open strings high E → low E in standard tuning */
+const STANDARD_OPEN_MIDI = [64, 59, 55, 50, 45, 40]; // E4 B3 G3 D3 A2 E2
+const STANDARD_OPEN_CHROMA = [4, 11, 7, 2, 9, 4];
 
 let audioCtx: AudioContext | null = null;
 
@@ -21,44 +14,119 @@ function getContext(): AudioContext {
   return audioCtx;
 }
 
+function midiToFreq(midi: number): number {
+  return A4 * Math.pow(2, (midi - 69) / 12);
+}
+
+function chromaOffset(from: number, to: number): number {
+  let d = to - from;
+  if (d > 6) d -= 12;
+  if (d < -6) d += 12;
+  return d;
+}
+
+/** Frequency for a string+fret in the current tuning */
+function stringFretToFreq(stringIdx: number, fret: number, tuning: number[]): number {
+  const openChroma = tuning[stringIdx] ?? STANDARD_OPEN_CHROMA[stringIdx] ?? 4;
+  const baseMidi = STANDARD_OPEN_MIDI[stringIdx] ?? 64;
+  const tuneOffset = chromaOffset(STANDARD_OPEN_CHROMA[stringIdx] ?? openChroma, openChroma);
+  return midiToFreq(baseMidi + tuneOffset + fret);
+}
+
+function noteNameToFreq(noteName: string, octave = 3): number {
+  const idx = NOTES.indexOf(noteName);
+  if (idx === -1) return A4;
+  // MIDI: C4 = 60
+  return midiToFreq((octave + 1) * 12 + idx);
+}
+
+/**
+ * Karplus–Strong plucked-string voice with a brief pick transient.
+ * Sounds much more like a guitar than a raw oscillator beep.
+ */
+function pluck(
+  freq: number,
+  duration = 1.2,
+  stringIdx = 2,
+  velocity = 0.85
+): void {
+  const ctx = getContext();
+  const sr = ctx.sampleRate;
+  const period = Math.max(2, Math.round(sr / freq));
+  const length = Math.ceil(sr * duration);
+  const buffer = ctx.createBuffer(1, length, sr);
+  const data = buffer.getChannelData(0);
+
+  // Brightness / decay vary by string (high E brighter & shorter, low E darker & longer)
+  const brightness = 0.55 + (5 - stringIdx) * 0.06;
+  const decay = 0.988 + stringIdx * 0.0015; // thicker strings ring longer
+  const pickNoise = 0.35 + brightness * 0.25;
+
+  // Initial excitation: filtered noise burst (the "pick")
+  for (let i = 0; i < period; i++) {
+    const noise = Math.random() * 2 - 1;
+    const envelope = 1 - i / period;
+    data[i] = noise * envelope * pickNoise;
+  }
+
+  // Karplus–Strong loop with mild low-pass in the feedback path
+  for (let i = period; i < length; i++) {
+    const a = data[i - period];
+    const b = data[i - period - 1] ?? a;
+    // Blend based on brightness: more averaging = darker / duller
+    const avg = a * brightness + b * (1 - brightness);
+    data[i] = avg * decay;
+  }
+
+  const source = ctx.createBufferSource();
+  source.buffer = buffer;
+
+  // Soft body / amp tone shaping
+  const filter = ctx.createBiquadFilter();
+  filter.type = "lowpass";
+  filter.frequency.value = 1800 + (5 - stringIdx) * 700;
+  filter.Q.value = 0.7;
+
+  const presence = ctx.createBiquadFilter();
+  presence.type = "peaking";
+  presence.frequency.value = 1200;
+  presence.Q.value = 0.8;
+  presence.gain.value = 2.5;
+
+  const gain = ctx.createGain();
+  const now = ctx.currentTime;
+  const peak = 0.22 * velocity;
+  gain.gain.setValueAtTime(0.0001, now);
+  gain.gain.exponentialRampToValueAtTime(peak, now + 0.008);
+  gain.gain.exponentialRampToValueAtTime(peak * 0.55, now + 0.08);
+  gain.gain.exponentialRampToValueAtTime(0.0001, now + duration);
+
+  source.connect(filter);
+  filter.connect(presence);
+  presence.connect(gain);
+  gain.connect(ctx.destination);
+
+  source.start(now);
+  source.stop(now + duration + 0.05);
+}
+
 export function playNote(
   openNoteIndex: number,
   fret: number,
   tuning: number[],
   stringIdx: number,
-  duration = 0.35
+  duration = 1.15
 ): void {
-  const ctx = getContext();
   const open = tuning[stringIdx] ?? openNoteIndex;
-  const freq = fretToFrequency(open, fret);
-  const osc = ctx.createOscillator();
-  const gain = ctx.createGain();
-  osc.type = "triangle";
-  osc.frequency.value = freq;
-  gain.gain.setValueAtTime(0.0001, ctx.currentTime);
-  gain.gain.exponentialRampToValueAtTime(0.25, ctx.currentTime + 0.02);
-  gain.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + duration);
-  osc.connect(gain);
-  gain.connect(ctx.destination);
-  osc.start();
-  osc.stop(ctx.currentTime + duration + 0.05);
+  const freq = stringFretToFreq(stringIdx, fret, tuning.length ? tuning : [open]);
+  // Slightly longer sustain on lower strings
+  const sustain = duration + stringIdx * 0.08;
+  pluck(freq, sustain, stringIdx);
 }
 
-export function playNoteByName(noteName: string, duration = 0.35): void {
-  const idx = NOTES.indexOf(noteName);
-  if (idx === -1) return;
-  const ctx = getContext();
-  const osc = ctx.createOscillator();
-  const gain = ctx.createGain();
-  osc.type = "triangle";
-  osc.frequency.value = noteToFrequency(idx, 4);
-  gain.gain.setValueAtTime(0.0001, ctx.currentTime);
-  gain.gain.exponentialRampToValueAtTime(0.2, ctx.currentTime + 0.02);
-  gain.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + duration);
-  osc.connect(gain);
-  gain.connect(ctx.destination);
-  osc.start();
-  osc.stop(ctx.currentTime + duration + 0.05);
+export function playNoteByName(noteName: string, duration = 1.0): void {
+  const freq = noteNameToFreq(noteName, 3);
+  pluck(freq, duration, 2, 0.75);
 }
 
 export function playClick(accent = false): void {
@@ -67,12 +135,13 @@ export function playClick(accent = false): void {
   const gain = ctx.createGain();
   osc.type = "square";
   osc.frequency.value = accent ? 1200 : 800;
-  gain.gain.setValueAtTime(accent ? 0.15 : 0.08, ctx.currentTime);
-  gain.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + 0.05);
+  const now = ctx.currentTime;
+  gain.gain.setValueAtTime(accent ? 0.1 : 0.05, now);
+  gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.04);
   osc.connect(gain);
   gain.connect(ctx.destination);
-  osc.start();
-  osc.stop(ctx.currentTime + 0.06);
+  osc.start(now);
+  osc.stop(now + 0.05);
 }
 
 export function playSequence(
@@ -126,7 +195,7 @@ export function startBackingLoop(
     if (cancelled) return;
     const interval = intervals[beat % intervals.length];
     const noteIdx = (rootIdx + interval) % 12;
-    playNoteByName(NOTES[noteIdx], 0.25);
+    playNoteByName(NOTES[noteIdx], 0.55);
     beat++;
     timeoutId = setTimeout(tick, beatMs);
   };
