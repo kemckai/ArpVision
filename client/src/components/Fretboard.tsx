@@ -102,15 +102,13 @@ export const Fretboard: React.FC<FretboardProps> = ({
     stepPosition?.string === stringIdx && stepPosition?.fret === fret;
 
   const fretXPercent = useCallback(
-    (colIdx: number, fret: number) => {
-      if (fret === 0) return ((colIdx + 0.5) / numFretCols) * 100;
-      return (colIdx / numFretCols) * 100;
+    (colIdx: number, _fret: number) => {
+      return ((colIdx + 0.5) / numFretCols) * 100;
     },
     [numFretCols]
   );
 
-  const noteLeftStyle = (fret: number) =>
-    fret === 0 ? "50%" : "0%";
+  const noteLeftStyle = (_fret: number) => "50%";
 
   return (
     <div className={cn("w-full overflow-x-auto", compact ? "pb-4" : "pb-10")}>
@@ -137,18 +135,18 @@ export const Fretboard: React.FC<FretboardProps> = ({
           {/* Nut */}
           <div className="absolute left-12 top-0 bottom-0 w-1.5 bg-gradient-to-r from-[#f0e6d3] via-[#fff8ee] to-[#c9b896] z-20 shadow-[2px_0_6px_rgba(0,0,0,0.5)]" />
 
-          {/* Fret spaces + metal fret wires */}
+          {/* Fret spaces + metal fret wires (wire at right edge of each fretted cell) */}
           <div className="absolute inset-0 left-12 flex pointer-events-none z-0">
             {displayFrets.map((fret, colIdx) => (
               <div
                 key={`fret-space-${fret}`}
                 className={cn(
-                  "flex-1 h-full",
+                  "flex-1 h-full relative",
                   colIdx % 2 === 0 ? "bg-[#3d2e1f]" : "bg-[#342818]"
                 )}
               >
-                {colIdx > 0 && (
-                  <div className="h-full w-[3px] -ml-[1.5px] bg-gradient-to-r from-[#6b6b6b] via-[#e2e2e2] to-[#6b6b6b] shadow-[0_0_4px_rgba(255,255,255,0.15)]" />
+                {fret > 0 && (
+                  <div className="absolute right-0 top-0 bottom-0 w-[3px] bg-gradient-to-r from-[#6b6b6b] via-[#e2e2e2] to-[#6b6b6b] shadow-[0_0_4px_rgba(255,255,255,0.15)]" />
                 )}
               </div>
             ))}

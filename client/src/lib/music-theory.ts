@@ -1061,15 +1061,15 @@ export const FAMOUS_LICKS: Lick[] = [
     id: "gilmour-shine",
     artist: "David Gilmour",
     name: "Shine On 4-Note Arp",
-    description: "The haunting Shine On You Crazy Diamond opening phrase — A♯–F–G–E.",
-    root: "G",
+    description: "Shine On You Crazy Diamond motif — A♯ (D8) → F (B6) → open G → open high E.",
+    root: "A#",
     type: "min",
-    // Tab: D string 8 (A#) → B string 6 (F) → open G → open high E
+    // Exact tab (high→low E B G D A E): e=0, B=6, G=0, D=8 — play order D→B→G→e
     positions: [
-      { string: 3, fret: 8 }, // A#
-      { string: 1, fret: 6 }, // F
-      { string: 2, fret: 0 }, // G
-      { string: 0, fret: 0 }, // E
+      { string: 3, fret: 8 }, // D string 8 = A#
+      { string: 1, fret: 6 }, // B string 6 = F
+      { string: 2, fret: 0 }, // open G = G
+      { string: 0, fret: 0 }, // open high E = E
     ],
   },
   {

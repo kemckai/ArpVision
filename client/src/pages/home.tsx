@@ -256,13 +256,29 @@ export default function Home() {
     currentTuning.notes,
   ]);
 
-  const filteredActiveNotes = useMemo(
-    () =>
-      activeNotes.filter(
-        (n) => n.fret >= settings.fretMin && n.fret <= settings.fretMax
-      ),
-    [activeNotes, settings.fretMin, settings.fretMax]
-  );
+  const filteredActiveNotes = useMemo(() => {
+    // Always keep lick/technique notes visible even if outside the fret-range filter
+    // (e.g. Shine On uses open strings at fret 0).
+    if (activeLick?.positions?.length || activeTechniqueId) {
+      return activeNotes;
+    }
+    return activeNotes.filter(
+      (n) => n.fret >= settings.fretMin && n.fret <= settings.fretMax
+    );
+  }, [activeNotes, settings.fretMin, settings.fretMax, activeLick, activeTechniqueId]);
+
+  const lickNeedsOpenStrings =
+    !!activeLick?.positions?.some((p) => p.fret === 0) ||
+    !!(
+      activeTechniqueId &&
+      [...SWEEP_PATTERNS, ...TAPPING_PATTERNS]
+        .find((p) => p.id === activeTechniqueId)
+        ?.positions.some((p) => p.fret === 0)
+    );
+
+  const effectiveShowOpenStrings = settings.showOpenStrings || lickNeedsOpenStrings;
+  const effectiveFretMin =
+    lickNeedsOpenStrings ? Math.min(0, settings.fretMin) : settings.fretMin;
 
   const compareNotes = useMemo(() => {
     if (!settings.compareMode) return [];
@@ -1423,8 +1439,8 @@ export default function Home() {
                   tuning={currentTuning.notes}
                   showNoteNames={settings.showNoteNames}
                   leftHanded={settings.leftHanded}
-                  showOpenStrings={settings.showOpenStrings}
-                  fretMin={settings.fretMin}
+                  showOpenStrings={effectiveShowOpenStrings}
+                  fretMin={effectiveFretMin}
                   fretMax={settings.fretMax}
                   activeStep={lickStep}
                   bassInterval={bassInterval}
