@@ -46,9 +46,9 @@ function noteNameToFreq(noteName: string, octave = 3): number {
  */
 function pluck(
   freq: number,
-  duration = 1.2,
+  duration = 2.8,
   stringIdx = 2,
-  velocity = 0.85
+  velocity = 0.95
 ): void {
   const ctx = getContext();
   const sr = ctx.sampleRate;
@@ -57,10 +57,11 @@ function pluck(
   const buffer = ctx.createBuffer(1, length, sr);
   const data = buffer.getChannelData(0);
 
-  // Brightness / decay vary by string (high E brighter & shorter, low E darker & longer)
-  const brightness = 0.55 + (5 - stringIdx) * 0.06;
-  const decay = 0.988 + stringIdx * 0.0015; // thicker strings ring longer
-  const pickNoise = 0.35 + brightness * 0.25;
+  // Brightness / decay vary by string (high E brighter, low E darker & longer)
+  const brightness = 0.62 + (5 - stringIdx) * 0.05;
+  // Decay very close to 1.0 = long sustain (thicker strings ring even longer)
+  const decay = 0.9965 + stringIdx * 0.00055;
+  const pickNoise = 0.42 + brightness * 0.2;
 
   // Initial excitation: filtered noise burst (the "pick")
   for (let i = 0; i < period; i++) {
@@ -73,7 +74,6 @@ function pluck(
   for (let i = period; i < length; i++) {
     const a = data[i - period];
     const b = data[i - period - 1] ?? a;
-    // Blend based on brightness: more averaging = darker / duller
     const avg = a * brightness + b * (1 - brightness);
     data[i] = avg * decay;
   }
@@ -84,21 +84,23 @@ function pluck(
   // Soft body / amp tone shaping
   const filter = ctx.createBiquadFilter();
   filter.type = "lowpass";
-  filter.frequency.value = 1800 + (5 - stringIdx) * 700;
-  filter.Q.value = 0.7;
+  filter.frequency.value = 2200 + (5 - stringIdx) * 600;
+  filter.Q.value = 0.65;
 
   const presence = ctx.createBiquadFilter();
   presence.type = "peaking";
-  presence.frequency.value = 1200;
-  presence.Q.value = 0.8;
-  presence.gain.value = 2.5;
+  presence.frequency.value = 1100;
+  presence.Q.value = 0.7;
+  presence.gain.value = 3.2;
 
   const gain = ctx.createGain();
   const now = ctx.currentTime;
-  const peak = 0.22 * velocity;
+  const peak = 0.38 * velocity;
+  // Strong attack, then long natural sustain instead of a quick fade
   gain.gain.setValueAtTime(0.0001, now);
-  gain.gain.exponentialRampToValueAtTime(peak, now + 0.008);
-  gain.gain.exponentialRampToValueAtTime(peak * 0.55, now + 0.08);
+  gain.gain.exponentialRampToValueAtTime(peak, now + 0.01);
+  gain.gain.exponentialRampToValueAtTime(peak * 0.85, now + 0.12);
+  gain.gain.exponentialRampToValueAtTime(peak * 0.45, now + duration * 0.55);
   gain.gain.exponentialRampToValueAtTime(0.0001, now + duration);
 
   source.connect(filter);
@@ -107,7 +109,7 @@ function pluck(
   gain.connect(ctx.destination);
 
   source.start(now);
-  source.stop(now + duration + 0.05);
+  source.stop(now + duration + 0.08);
 }
 
 export function playNote(
@@ -115,18 +117,17 @@ export function playNote(
   fret: number,
   tuning: number[],
   stringIdx: number,
-  duration = 1.15
+  duration = 2.6
 ): void {
   const open = tuning[stringIdx] ?? openNoteIndex;
   const freq = stringFretToFreq(stringIdx, fret, tuning.length ? tuning : [open]);
-  // Slightly longer sustain on lower strings
-  const sustain = duration + stringIdx * 0.08;
+  const sustain = duration + stringIdx * 0.2;
   pluck(freq, sustain, stringIdx);
 }
 
-export function playNoteByName(noteName: string, duration = 1.0): void {
+export function playNoteByName(noteName: string, duration = 2.2): void {
   const freq = noteNameToFreq(noteName, 3);
-  pluck(freq, duration, 2, 0.75);
+  pluck(freq, duration, 2, 0.9);
 }
 
 export function playClick(accent = false): void {
@@ -195,7 +196,7 @@ export function startBackingLoop(
     if (cancelled) return;
     const interval = intervals[beat % intervals.length];
     const noteIdx = (rootIdx + interval) % 12;
-    playNoteByName(NOTES[noteIdx], 0.55);
+    playNoteByName(NOTES[noteIdx], 1.1);
     beat++;
     timeoutId = setTimeout(tick, beatMs);
   };
